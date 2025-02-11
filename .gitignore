@@ -5,3 +5,12 @@ Thumbs.db
 # Directories
 /design
 /css
+
+# VCS #
+#######
+.svn
+.svn/
+CVS
+
+# VSCode
+.vscode/*
