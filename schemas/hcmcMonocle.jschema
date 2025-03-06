@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://hcmc.uvic.ca/schemas/hcmcMonocle.json",
     "title": "JSON Schema for hcmcMonocle Facsimiles",
     "description": "This schema describes the JSON structure required by the hcmcMonocle application. Any JSON document conforming to this schema should be processable by hcmcMonocle.",
@@ -24,7 +24,15 @@
                 "thumbnailBaseUrl": {
                     "description": "The location where thumbnails are to be found. If empty, either full URLs to thumbnails will be included for each surface, or no thumbnails are available.",
                     "type": "string"
-                }
+                },
+                "linkBaseUrl": {
+                    "description": "The base URL from which relative links in the surface items are to be calculated",
+                    "type": "string"
+                },
+                "authority":{
+                    "description": "The name of a person or other agency responsible for making the facsimile available, other than a publisher or distributor.",
+                    "type": "string" 
+                } 
             }
         }, 
         "surfaces": {
@@ -43,15 +51,27 @@
                         "type": "string"
                     },
                     "links":{
-                        "description": "A list of zero or more Urls with captions which relate to this surface." ,
+                        "description": "A list of zero or more Urls with captions which relate to this surface.",
                         "type": "array",
                         "items": {
                             "description": "Components of a web link.",
                             "type": "object",
                             "properties": {
-                                
-                            }
+                                "caption": {
+                                    "description": "The text which will become a link to the digital edition location.",
+                                    "type": "string" 
+                                },
+                                "link":{
+                                    "description": "An absolute URI, or a URI relative to the linkBaseUrl",
+                                    "type": "string"
+                                } 
+                            },
+                            "minItems": 0 
                         } 
+                    }, 
+                    "surfaceMetadata":{
+                        "description": "Metadata about this specific surface.",
+                        "type": "string"
                     } 
                 }
             },
