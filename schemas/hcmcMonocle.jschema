@@ -31,9 +31,28 @@
             "description": "The sequence of digital surrogates",
             "type": "array",
             "items": {
+                "description": "An array of facsimile images.", 
                 "type": "object",
                 "properties": {
-                    
+                    "imageUrl":{
+                        "description": "Full path to image, or relative path based on imageBaseUrl.",
+                        "type": "string"
+                    },
+                    "thumbnailUrl":{
+                        "description": "Full path to thumbnail, or relative path based on thumbnailBaseUrl.",
+                        "type": "string"
+                    },
+                    "links":{
+                        "description": "A list of zero or more Urls with captions which relate to this surface." ,
+                        "type": "array",
+                        "items": {
+                            "description": "Components of a web link.",
+                            "type": "object",
+                            "properties": {
+                                
+                            }
+                        } 
+                    } 
                 }
             },
             "minItems": 1
