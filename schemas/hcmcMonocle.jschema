@@ -9,8 +9,12 @@
             "description": "The main title of the facsimile text",
             "type": "string"
         },
-        "facsTitleSub": {
-            "description": "The subtitle of the facsimile text",
+        "facsTitleShort": {
+            "description": "The short of the facsimile text",
+            "type": "string"
+        },
+        "facsTitleFull": {
+            "description": "The full of the facsimile text",
             "type": "string"
         },
         "textMetadata": {
