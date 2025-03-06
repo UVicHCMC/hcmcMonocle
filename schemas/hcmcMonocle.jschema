@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://hcmc.uvic.ca/schemas/hcmcMonocle.json",
+    "title": "JSON Schema for hcmcMonocle Facsimiles",
+    "description": "This schema describes the JSON structure required by the hcmcMonocle application. Any JSON document conforming to this schema should be processable by hcmcMonocle.",
+    "type": "object",
+    "properties": {
+        "facsTitleMain": {
+            "description": "The main title of the facsimile text",
+            "type": "string"
+        },
+        "facsTitleSub": {
+            "description": "The subtitle of the facsimile text",
+            "type": "string"
+        },
+        "textMetadata": {
+            "description": "Text-level metadata",
+            "type": "object",
+            "properties": {
+                "imageBaseUrl": {
+                "description": "The location where images are to be found. If empty, full URLs to images will be included for each surface.",
+                "type": "string"
+            },
+                "thumbnailBaseUrl": {
+                    "description": "The location where thumbnails are to be found. If empty, either full URLs to thumbnails will be included for each surface, or no thumbnails are available.",
+                    "type": "string"
+                }
+            }
+        }, 
+        "surfaces": {
+            "description": "The sequence of digital surrogates",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    
+                }
+            },
+            "minItems": 1
+        } 
+    },
+    "required": [ "facsTitleMain", "textMetadata", "surfaces" ]
+}
