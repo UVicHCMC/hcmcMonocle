@@ -36,6 +36,14 @@
                 "authority":{
                     "description": "The name of a person or other agency responsible for making the facsimile available, other than a publisher or distributor.",
                     "type": "string" 
+                },
+                "availability":{
+                    "description": "Conditions on use or distribution of the facsimile images, copyright status, licence information, etc.",
+                    "type": "string"
+                },
+                "source":{
+                    "description": "Information about the source document for which this facsimile is a digital surrogate." ,
+                    "type": "string" 
                 } 
             }
         }, 
