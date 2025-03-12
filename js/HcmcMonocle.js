@@ -12,6 +12,10 @@
   */
   
 
+"use strict";
+
+var hcmcMonocle;
+window.addEventListener('load', function(){hcmcMonocle = new HcmcMonocle();});
 
 /** 
  *  @class HcmcMonocle
@@ -27,9 +31,6 @@ class HcmcMonocle{
       *              to find any information it needs, including 
       *              a JSON facsimile file. It loads the 
       *              file and populates its data object from it.
-      * @param {string} jsonUri The URI of a JSON file (probably relative,
-      *              but may be absolute).
-      *              
       */
       constructor(){
 
@@ -44,7 +45,7 @@ class HcmcMonocle{
         };
 
         //Property to keep track of the current page that's showing.
-        this.currSurface = 0;
+        this.currSurface = -1;
 
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
@@ -109,6 +110,7 @@ class HcmcMonocle{
         if (idx > -1){
             //TODO: Logic for displaying a surface.
             console.log('Showing surface with image' + targImageUrl + '...');
+            this.currSurface = idx;
         }
         else{
             console.log('This surface image was not found: ' + targImageUrl);
