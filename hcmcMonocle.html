@@ -14,7 +14,8 @@
     <body>
         
         <header>
-            <h1>HCMC Monocle Facsimile Viewer</h1>
+            <h2>HCMC Monocle Facsimile Viewer</h2>
+            <h1 id="facsTitle"></h1>
         </header>
        
         <!-- The JavaScript HcmcMonocle object will know about these div ids
@@ -27,20 +28,21 @@
             
         </div>
        
-        <div id="onePage">
-            <!-- Single-page content will be displayed in here. -->
+        <div id="oneSurface">
+            <!-- Single-surface content will be displayed in here. -->
             
-            <div id="onePageMetadata">
-                <!-- Metadata (if any) for the individual page will 
+            <div id="oneSurfaceMetadata">
+                <!-- Metadata (if any) for the individual Surface will 
                      be displayed here.-->
                 
                 
             </div>
-            <div id="onePageImage">
+            <figure id="oneSurfaceFigure">
                 <!-- The image itself goes in here. -->
-            </div>
+                <img id="oneSurfaceImage" src="favicon.svg"/>
+            </figure>
             
-            <div id="onePageLinks">
+            <div id="oneSurfaceLinks">
                 <!-- In here will be links back to the anthology page 
                      locations matching this image. -->
             </div>
@@ -49,6 +51,10 @@
         <div id="collection">
             <!-- In here will go all the thumbnails, functioning as 
                  links to the actual pages. -->
+            <div id="thumbnails" 
+                style="display: flex; flex-direction: row; flex-wrap: wrap;">
+                
+            </div>
             
         </div>
 

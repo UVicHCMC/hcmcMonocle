@@ -47,6 +47,13 @@ class HcmcMonocle{
         //Property to keep track of the current page that's showing.
         this.currSurface = -1;
 
+        //Find things in the page that we need to manipulate.
+        this.pageTitle       = document.getElementById('facsTitle');
+        this.facsMetadata    = document.getElementById('facsMetadata');
+        this.collection      = document.getElementById('collection');
+        this.oneSurface      = document.getElementById('oneSurface');
+        this.oneSurfaceImage = document.getElementById('oneSurfaceImage');
+
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
 
@@ -155,9 +162,10 @@ class HcmcMonocle{
      *  @function HcmcMonocle~showMetadata 
      *  @description This displays the facsimile-level metadata
     */
-        showMetadata(l){
-            //TODO: Logic for displaying metadata.
-            console.log('Showing project metadata...');
-        }
+    showMetadata(l){
+        //TODO: Logic for displaying metadata.
+        console.log('Showing project metadata...');
+        this.pageTitle.innerHTML = this.data.facsTitleMain;
+    }
 }
     
