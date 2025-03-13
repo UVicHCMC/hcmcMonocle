@@ -129,6 +129,9 @@ class HcmcMonocle{
             //TODO: Logic for displaying a surface.
             console.log('Showing surface with image' + targImageUrl + '...');
             this.currSurface = idx;
+            this.oneSurfaceImage.setAttribute('src', this.data.textMetadata.imageBaseUrl + targImageUrl);
+            this.collection.style.display = 'none';
+            this.oneSurface.style.display = 'block';
         }
         else{
             console.log('This surface image was not found: ' + targImageUrl);
