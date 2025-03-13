@@ -48,11 +48,21 @@ class HcmcMonocle{
         this.currSurface = -1;
 
         //Find things in the page that we need to manipulate.
-        this.pageTitle       = document.getElementById('facsTitle');
+        this.facsTitle       = document.getElementById('facsTitle');
         this.facsMetadata    = document.getElementById('facsMetadata');
         this.collection      = document.getElementById('collection');
+        this.thumbnails      = document.getElementById('thumbnails');
         this.oneSurface      = document.getElementById('oneSurface');
         this.oneSurfaceImage = document.getElementById('oneSurfaceImage');
+
+        //Sanity check.
+        if (!this.facsTitle){console.error('ERROR: Item with id "facsTitle" not found.');}
+        if (!this.facsMetadata){console.error('ERROR: Item with id "facsMetadata" not found.');}
+        if (!this.collection){console.error('ERROR: Item with id "collection" not found.');}
+        if (!this.thumbnails){console.error('ERROR: Item with id "thumbnails" not found.');}
+        if (!this.oneSurface){console.error('ERROR: Item with id "oneSurface" not found.');}
+        if (!this.oneSurfaceImage){console.error('ERROR: Item with id "oneSurfaceImage" not found.');}
+        
 
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
@@ -113,6 +123,7 @@ class HcmcMonocle{
      *  @param {string} targImageUrl The image URL to display.
     */
     showSurface(targImageUrl){
+        console.log('Showing surface ' + targImageUrl);
         let idx = this.getSurfaceIndex(targImageUrl);
         if (idx > -1){
             //TODO: Logic for displaying a surface.
@@ -156,6 +167,19 @@ class HcmcMonocle{
         console.log('Showing thumbnail page...');
         //Check whether it's already been constructed. If not, construct it 
         // first. Then hide the single-surface page and show the collection. 
+        if (this.thumbnails.getElementsByTagName('figure').length < 1){
+            console.log('Creating thumbnail display...');
+            for (let s of this.data.surfaces){
+                let f = document.createElement('figure');
+                let i = document.createElement('img');
+                i.setAttribute('src', this.data.textMetadata.thumbnailBaseUrl + s.thumbnailUrl);
+                i.addEventListener('click', function(){this.showSurface(s.imageUrl)}.bind(this));
+                f.appendChild(i);
+                this.thumbnails.appendChild(f);
+            }
+        }
+        this.oneSurface.style.display = 'none';
+        this.collection.style.display = 'block';
     }
 
     /** 
@@ -165,7 +189,7 @@ class HcmcMonocle{
     showMetadata(l){
         //TODO: Logic for displaying metadata.
         console.log('Showing project metadata...');
-        this.pageTitle.innerHTML = this.data.facsTitleMain;
+        this.facsTitle.innerHTML = this.data.facsTitleMain;
     }
 }
     
