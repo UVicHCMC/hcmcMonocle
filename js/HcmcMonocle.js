@@ -54,14 +54,18 @@ class HcmcMonocle{
         this.thumbnails      = document.getElementById('thumbnails');
         this.oneSurface      = document.getElementById('oneSurface');
         this.oneSurfaceImage = document.getElementById('oneSurfaceImage');
+        this.btnLeft         = document.getElementById('btnLeft');
+        this.btnRight        = document.getElementById('btnRight');
 
-        //Sanity check.
+        //Sanity checks.
         if (!this.facsTitle){console.error('ERROR: Item with id "facsTitle" not found.');}
         if (!this.facsMetadata){console.error('ERROR: Item with id "facsMetadata" not found.');}
         if (!this.collection){console.error('ERROR: Item with id "collection" not found.');}
         if (!this.thumbnails){console.error('ERROR: Item with id "thumbnails" not found.');}
         if (!this.oneSurface){console.error('ERROR: Item with id "oneSurface" not found.');}
         if (!this.oneSurfaceImage){console.error('ERROR: Item with id "oneSurfaceImage" not found.');}
+        if (!this.btnLeft){console.error('ERROR: Item with id "btnLeft" not found.');}
+        if (!this.btnRight){console.error('ERROR: Item with id "btnRight" not found.');}
         
 
         //Figure out our config parameters based on the document URI.
@@ -69,6 +73,8 @@ class HcmcMonocle{
 
         //Create an object to hold the data.
         this.data = {};
+
+        this.loaded = false;
 
         //Figure out the target image to show first, if there is one.
         this.targSurface = null;
@@ -79,6 +85,7 @@ class HcmcMonocle{
 
         //Now look for a JSON file to get.
         this.jsonUri = null;
+
         if (searchParams.has('facs')){
             this.jsonUri = searchParams.get('facs').trim();
             //Retrieve the JSON to populate the object.
@@ -97,6 +104,7 @@ class HcmcMonocle{
         const response = await fetch(request, this.fetchHeaders);
         const json = await response.json();
         this.data = json;
+        this.loaded = true;
         this.display();
     }
 
@@ -107,9 +115,10 @@ class HcmcMonocle{
      *              page if there is one.
     */
     display(){
+        console.log('loaded? ' || this.loaded.toString());
         this.showMetadata();
         if (this.targSurface != null){
-            this.showSurface(targSurface);
+            this.showSurface(this.targSurface);
         }
         else{
             this.showCollection();

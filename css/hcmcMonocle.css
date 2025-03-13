@@ -12,3 +12,17 @@ div#thumbnails{
         cursor: pointer;
     }
 }
+div#figWrapper{
+    display: grid;
+    grid-template-columns: 6rem 1fr 6rem;
+    gap: 1rem;
+    div{
+        text-align: center;
+    }
+    img{
+        max-width: 100%;
+    }
+    button{
+        font-size: 3rem;
+    }
+}
