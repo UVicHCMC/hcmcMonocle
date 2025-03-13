@@ -67,6 +67,9 @@ class HcmcMonocle{
         if (!this.btnLeft){console.error('ERROR: Item with id "btnLeft" not found.');}
         if (!this.btnRight){console.error('ERROR: Item with id "btnRight" not found.');}
         
+        //Add handlers to arrow buttons.
+        this.btnLeft.addEventListener('click', function(){this.switchSurface(-1)}.bind(this));
+        this.btnRight.addEventListener('click', function(){this.switchSurface(1)}.bind(this));
 
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
@@ -115,10 +118,9 @@ class HcmcMonocle{
      *              page if there is one.
     */
     display(){
-        console.log('loaded? ' || this.loaded.toString());
         this.showMetadata();
         if (this.targSurface != null){
-            this.showSurface(this.targSurface);
+            this.showSurfaceByUrl(this.targSurface);
         }
         else{
             this.showCollection();
@@ -126,25 +128,57 @@ class HcmcMonocle{
     }
 
     /** 
-     *  @function HcmcMonocle~showSurface 
+     *  @function HcmcMonocle~showSurfaceByUrl 
      *  @description This displays a specific surface image in 
-     *               the viewer.
+     *               the viewer, based on its URL.
      *  @param {string} targImageUrl The image URL to display.
     */
-    showSurface(targImageUrl){
+    showSurfaceByUrl(targImageUrl){
         console.log('Showing surface ' + targImageUrl);
         let idx = this.getSurfaceIndex(targImageUrl);
         if (idx > -1){
-            //TODO: Logic for displaying a surface.
-            console.log('Showing surface with image' + targImageUrl + '...');
-            this.currSurface = idx;
-            this.oneSurfaceImage.setAttribute('src', this.data.textMetadata.imageBaseUrl + targImageUrl);
-            this.collection.style.display = 'none';
-            this.oneSurface.style.display = 'block';
+            this.showSurfaceByIndex(idx);
         }
         else{
             console.log('This surface image was not found: ' + targImageUrl);
         }
+    }
+
+    /** 
+     *  @function HcmcMonocle~showSurfaceByIndex 
+     *  @description This displays a specific surface image in 
+     *               the viewer, based on its index in the surfaces array.
+     *  @param {string} idx The index of the image.
+    */
+    showSurfaceByIndex(idx){
+        if (idx > -1){
+            //Logic for displaying a surface.
+            this.currSurface = idx;
+            this.oneSurfaceImage.setAttribute('src', this.data.textMetadata.imageBaseUrl + this.data.surfaces[idx].imageUrl);
+            this.collection.style.display = 'none';
+            this.oneSurface.style.display = 'block';
+        }
+        else{
+            console.log('The surface image with this index was not found: ' + idx);
+        }
+    }
+
+    /** 
+     *  @function HcmcMonocle~switchSurface 
+     *  @description This moves up or down the surface array by one position
+     *               and displays the next surface.
+     *  @param {integer} changeBy An integer expected to be 1 or -1.
+    */
+    switchSurface(changeBy){
+        let newIdx = this.currSurface + changeBy;
+        //We may have to wrap around.
+        if (newIdx >= this.data.surfaces.length){
+            newIdx = 0;
+        }
+        if (newIdx < 0){
+            newIdx = this.data.surfaces.length - 1;
+        }
+        this.showSurfaceByIndex(newIdx);
     }
 
     /** 
@@ -161,7 +195,7 @@ class HcmcMonocle{
             return surface.imageUrl === targImageUrl;
         }
         let idx = this.data.surfaces.findIndex(isMatch);
-        if (idx){
+        if (idx > -1){
             return idx;
         }
         else{
@@ -185,7 +219,7 @@ class HcmcMonocle{
                 let f = document.createElement('figure');
                 let i = document.createElement('img');
                 i.setAttribute('src', this.data.textMetadata.thumbnailBaseUrl + s.thumbnailUrl);
-                i.addEventListener('click', function(){this.showSurface(s.imageUrl)}.bind(this));
+                i.addEventListener('click', function(){this.showSurfaceByUrl(s.imageUrl)}.bind(this));
                 f.appendChild(i);
                 this.thumbnails.appendChild(f);
             }
