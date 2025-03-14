@@ -49,7 +49,9 @@ class HcmcMonocle{
 
         //These are the ids of elements on the page we need to connect to.
         this.requiredIds = new Array('facsTitle', 'facsMetadata', 'collection', 'thumbnails',
-                                     'oneSurface', 'oneSurfaceImage', 'btnLeft', 'btnRight');
+                                     'oneSurface', 'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
+                                     'btnPanDown', 'btnPanLeft', 'btnPanPlus', 'btnPanMinus', 
+                                     'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 'btnRight');
                                     
         //Find each of thest things and connect it to a property.                             
         for (let id of this.requiredIds){
@@ -57,9 +59,11 @@ class HcmcMonocle{
             if (!this[id]){console.error(`ERROR: Item with id ${id} not found.`);}
         }
         
-        //Add handlers to arrow buttons.
+        //Add handlers to various buttons.
         this.btnLeft.addEventListener('click', function(){this.switchSurface(-1)}.bind(this));
         this.btnRight.addEventListener('click', function(){this.switchSurface(1)}.bind(this));
+        this.btnRotate.addEventListener('click', function(){this.rotateImage()}.bind(this));
+        this.btnReset.addEventListener('click', function(){this.resetImage()}.bind(this));
 
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
@@ -234,6 +238,62 @@ class HcmcMonocle{
         //TODO: Logic for displaying metadata.
         console.log('Showing project metadata...');
         this.facsTitle.innerHTML = this.data.facsTitleMain;
+    }
+
+    /**
+    * @function HcmcMonocle~adjustImage
+    * @description Function to move an image container so that its top
+    *              and left are onscreen, making the whole image available 
+    *              for scrolling.
+    */
+    adjustImage(){
+        if ((this.oneSurface !== null)&&(this.oneSurfaceImage !== null)){
+            let leftOrigin = 50;
+            while (this.oneSurfaceImage.getBoundingClientRect().x < 20){
+                leftOrigin--;
+                this.oneSurface.style.transformOrigin = leftOrigin + '% 0%';
+            }
+        }
+    }
+
+    /**
+    * @function HcmcMonocle~rotateImage
+    * @description Function to rotate the image by 90 degrees. This reads the
+    *              current value of the transform property, parses out the 
+    *              rotation bit (if it's there), increments it and puts it back.
+    */
+    rotateImage(){
+        let img = this.oneSurfaceImage;
+        if (img !== null){
+            let tf = img.style.transform;
+            let strCurrRot = tf.replace(/^(.*)rotate\((\d+)deg\)(.*)$/, '$2');
+            let currRot = (strCurrRot.match(/^\d+$/))? parseInt(strCurrRot): 0;
+            let newRot = ((currRot + 90) % 360);
+            if (tf.indexOf('rotate') > -1){
+                img.style.transform = tf.replace(/^(.*)rotate\((\d+)deg\)(.*)$/, '$1rotate(' + newRot + 'deg)$3');
+            }
+            else{
+                img.style.transform = tf.replace('none', '') + ' rotate(' + newRot + 'deg)';
+            }
+            setTimeout(function(){this.adjustImage();}.bind(this), 1);
+        }
+    }
+    /**
+    * @function HcmcMonocle~resetImage
+    * @description Function to move an image container so that its top
+    *              and left are onscreen, making the whole image available 
+    * for scrolling.
+    */
+    resetImage(){
+        if ((this.oneSurface !== null)&&(this.oneSurfaceImage !== null)){
+            let img = this.oneSurfaceImage;
+            //Fix the left origin.
+            this.oneSurface.style.transformOrigin = '0% 0%';
+            //Fix the rotation.
+            let tf = img.style.transform;
+            img.style.transform = tf.replace(/^(.*)rotate\((\d+)deg\)(.*)$/, '$1rotate(0deg)$3');
+
+        }
     }
 }
     
