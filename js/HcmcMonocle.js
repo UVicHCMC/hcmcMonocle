@@ -47,11 +47,17 @@ class HcmcMonocle{
         //Property to keep track of the current page that's showing.
         this.currSurface = -1;
 
+        //Properties to control granularity of image scaling, rotating, and panning.
+        this.scaleFactor = 0.2;
+        this.panFactor = 5; //This is a percentage.
+        this.rotateFactor = 45; //degrees
+
         //These are the ids of elements on the page we need to connect to.
         this.requiredIds = new Array('facsTitle', 'facsMetadata', 'collection', 'thumbnails',
-                                     'oneSurface', 'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
-                                     'btnPanDown', 'btnPanLeft', 'btnPanPlus', 'btnPanMinus', 
-                                     'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 'btnRight');
+                                     'oneSurface', 'oneSurfaceFigure', 'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
+                                     'btnPanDown', 'btnPanLeft', 'btnPlus', 'btnMinus', 
+                                     'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 
+                                     'btnRight');
                                     
         //Find each of thest things and connect it to a property.                             
         for (let id of this.requiredIds){
@@ -60,10 +66,16 @@ class HcmcMonocle{
         }
         
         //Add handlers to various buttons.
-        this.btnLeft.addEventListener('click', function(){this.switchSurface(-1)}.bind(this));
-        this.btnRight.addEventListener('click', function(){this.switchSurface(1)}.bind(this));
-        this.btnRotate.addEventListener('click', function(){this.rotateImage()}.bind(this));
-        this.btnReset.addEventListener('click', function(){this.resetImage()}.bind(this));
+        this.btnLeft.addEventListener('click', function(){this.switchSurface(-1);}.bind(this));
+        this.btnRight.addEventListener('click', function(){this.switchSurface(1);}.bind(this));
+        this.btnRotate.addEventListener('click', function(){this.rotateImage();}.bind(this));
+        this.btnReset.addEventListener('click', function(){this.resetImage();}.bind(this));
+        this.btnPlus.addEventListener('click', function(){this.scaleImage(true);}.bind(this));
+        this.btnMinus.addEventListener('click', function(){this.scaleImage(false);}.bind(this));
+        this.btnPanUp.addEventListener('click', function(){this.panImage(0, -1)}.bind(this));
+        this.btnPanRight.addEventListener('click', function(){this.panImage(1, 0)}.bind(this));
+        this.btnPanDown.addEventListener('click', function(){this.panImage(0, 1)}.bind(this));
+        this.btnPanLeft.addEventListener('click', function(){this.panImage(-1, 0)}.bind(this));
 
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
@@ -241,22 +253,6 @@ class HcmcMonocle{
     }
 
     /**
-    * @function HcmcMonocle~adjustImage
-    * @description Function to move an image container so that its top
-    *              and left are onscreen, making the whole image available 
-    *              for scrolling.
-    */
-    adjustImage(){
-        if ((this.oneSurface !== null)&&(this.oneSurfaceImage !== null)){
-            let leftOrigin = 50;
-            while (this.oneSurfaceImage.getBoundingClientRect().x < 20){
-                leftOrigin--;
-                this.oneSurface.style.transformOrigin = leftOrigin + '% 0%';
-            }
-        }
-    }
-
-    /**
     * @function HcmcMonocle~rotateImage
     * @description Function to rotate the image by 90 degrees. This reads the
     *              current value of the transform property, parses out the 
@@ -265,19 +261,68 @@ class HcmcMonocle{
     rotateImage(){
         let img = this.oneSurfaceImage;
         if (img !== null){
-            let tf = img.style.transform;
-            let strCurrRot = tf.replace(/^(.*)rotate\((\d+)deg\)(.*)$/, '$2');
-            let currRot = (strCurrRot.match(/^\d+$/))? parseInt(strCurrRot): 0;
-            let newRot = ((currRot + 90) % 360);
-            if (tf.indexOf('rotate') > -1){
-                img.style.transform = tf.replace(/^(.*)rotate\((\d+)deg\)(.*)$/, '$1rotate(' + newRot + 'deg)$3');
+            let currRot = img.style.rotate;
+            if (currRot.match(/\d+deg/)){
+                currRot = parseInt(currRot);
             }
             else{
-                img.style.transform = tf.replace('none', '') + ' rotate(' + newRot + 'deg)';
+                currRot = 0;
             }
-            setTimeout(function(){this.adjustImage();}.bind(this), 1);
+            currRot += this.rotateFactor;
+            img.style.rotate = currRot + 'deg';
         }
     }
+
+/**
+    * @function HcmcMonocle~scaleImage
+    * @description Function to scale an image by a positive or negative .02.
+    *              This parses out the current value of the scale factor from 
+    *              the transform property, then changes it appropriately.
+    * @param {boolean} enlarge Boolean value to specify whether to enlarge or shrink.
+    */
+    scaleImage(enlarge){
+        let img = this.oneSurfaceImage;
+        if (img !== null){
+            let currScale = img.style.scale;
+            if (currScale.match(/[\d\.]+/)){
+                currScale = parseFloat(currScale);
+            }
+            else{
+                currScale = 1.0;
+            }
+            let newScale = parseFloat(currScale + (enlarge? this.scaleFactor : this.scaleFactor * -1));
+            img.style.scale = newScale;
+        }
+    }
+
+    /**
+    * @function HcmcMonocle~panImage
+    * @description Function to pan an image by the panFactor amount, 
+    *              vertically and/or horizontally.
+    * @param {integer} x A value of -1, 1, or 0 to control horizontal panning.
+    * @param {integer} y A value of -1, 1, or 0 to control vertical panning.
+    */
+    panImage(x, y){
+        let img = this.oneSurfaceImage;   
+        let currX, currY, newX, newY;[0-9]
+        if (img !== null){
+            //Get the current values.
+            let currTrans = this.oneSurfaceImage.style.translate; //A string.
+            if (currTrans.match(/-?\d+%\s+-?\d+%/)){
+                let bits = currTrans.split(/\s+/);
+                currX = parseInt(bits[0]);
+                currY = parseInt(bits[1]);
+            }
+            else{
+                currX = 0;
+                currY = 0;
+            }
+            newX = (x * this.panFactor) + currX;
+            newY = (y * this.panFactor) + currY;
+            img.style.translate = newX + '% ' + newY + '%';
+        }
+    }
+
     /**
     * @function HcmcMonocle~resetImage
     * @description Function to move an image container so that its top
@@ -287,12 +332,12 @@ class HcmcMonocle{
     resetImage(){
         if ((this.oneSurface !== null)&&(this.oneSurfaceImage !== null)){
             let img = this.oneSurfaceImage;
-            //Fix the left origin.
-            this.oneSurface.style.transformOrigin = '0% 0%';
+            //Fix the scale.
+            img.style.scale = 1;
             //Fix the rotation.
-            let tf = img.style.transform;
-            img.style.transform = tf.replace(/^(.*)rotate\((\d+)deg\)(.*)$/, '$1rotate(0deg)$3');
-
+            img.style.rotate = 'none';
+            //Fix the pan.
+            img.style.translate = '0% 0%';
         }
     }
 }
