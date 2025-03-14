@@ -47,25 +47,15 @@ class HcmcMonocle{
         //Property to keep track of the current page that's showing.
         this.currSurface = -1;
 
-        //Find things in the page that we need to manipulate.
-        this.facsTitle       = document.getElementById('facsTitle');
-        this.facsMetadata    = document.getElementById('facsMetadata');
-        this.collection      = document.getElementById('collection');
-        this.thumbnails      = document.getElementById('thumbnails');
-        this.oneSurface      = document.getElementById('oneSurface');
-        this.oneSurfaceImage = document.getElementById('oneSurfaceImage');
-        this.btnLeft         = document.getElementById('btnLeft');
-        this.btnRight        = document.getElementById('btnRight');
-
-        //Sanity checks.
-        if (!this.facsTitle){console.error('ERROR: Item with id "facsTitle" not found.');}
-        if (!this.facsMetadata){console.error('ERROR: Item with id "facsMetadata" not found.');}
-        if (!this.collection){console.error('ERROR: Item with id "collection" not found.');}
-        if (!this.thumbnails){console.error('ERROR: Item with id "thumbnails" not found.');}
-        if (!this.oneSurface){console.error('ERROR: Item with id "oneSurface" not found.');}
-        if (!this.oneSurfaceImage){console.error('ERROR: Item with id "oneSurfaceImage" not found.');}
-        if (!this.btnLeft){console.error('ERROR: Item with id "btnLeft" not found.');}
-        if (!this.btnRight){console.error('ERROR: Item with id "btnRight" not found.');}
+        //These are the ids of elements on the page we need to connect to.
+        this.requiredIds = new Array('facsTitle', 'facsMetadata', 'collection', 'thumbnails',
+                                     'oneSurface', 'oneSurfaceImage', 'btnLeft', 'btnRight');
+                                    
+        //Find each of thest things and connect it to a property.                             
+        for (let id of this.requiredIds){
+            this[id] = document.getElementById(id);
+            if (!this[id]){console.error(`ERROR: Item with id ${id} not found.`);}
+        }
         
         //Add handlers to arrow buttons.
         this.btnLeft.addEventListener('click', function(){this.switchSurface(-1)}.bind(this));
@@ -115,7 +105,8 @@ class HcmcMonocle{
      * @function HcmcMonocle~display 
      * @description This generates the content required to display
      *              either the collection page, or the target starting
-     *              page if there is one.
+     *              page if there is one. Then it starts preloading
+     *              images in the background.
     */
     display(){
         this.showMetadata();
@@ -124,6 +115,13 @@ class HcmcMonocle{
         }
         else{
             this.showCollection();
+        }
+        //Now we can start preloading images.
+        let arrImages = new Array();
+        for (let s of this.data.surfaces){
+            let img = new Image();
+            img.src =  this.data.textMetadata.imageBaseUrl + s.imageUrl;
+            arrImages.push(img);
         }
     }
 
