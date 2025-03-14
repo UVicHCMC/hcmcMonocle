@@ -28,6 +28,10 @@ div#figWrapper{
         max-height: 100%;
         overflow: hidden;
         scale: 1;
+        translate: 0% 0%;
+        rotate: 0deg;
+        transition-property: scale, translate, rotate;
+        transition-duration: 0.3s
     }
     button{
         font-size: 3rem;
