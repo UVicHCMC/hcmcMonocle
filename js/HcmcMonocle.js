@@ -25,6 +25,18 @@ window.addEventListener('load', function(){hcmcMonocle = new HcmcMonocle();});
   *              content in the host web page.
   */
 class HcmcMonocle{
+    /**
+     * Enum for panels, used to track which are showing.
+     * @readonly
+     * @enum {integer}
+     */
+    static PANELS = {
+        NONE:      -1,
+        COLLECTION: 0,
+        ONESURFACE: 1,
+        METADATA:   2
+    };
+
     /** 
       * @constructor
       * @description The constructor analyzes the URL search params
@@ -44,8 +56,12 @@ class HcmcMonocle{
             referrer: 'no-referrer'
         };
 
-        //Property to keep track of the current page that's showing.
+        //Property to keep track of the current image that's showing.
         this.currSurface = -1;
+
+        //Property to track whether the collection of thumbnails or the 
+        //oneSurface view is showing.
+        this.panelShowing = HcmcMonocle.PANELS.NONE;
 
         //Properties to control granularity of image scaling, rotating, and panning.
         this.scaleFactor = 0.2;
@@ -76,6 +92,19 @@ class HcmcMonocle{
         this.btnPanRight.addEventListener('click', function(){this.panImage(1, 0)}.bind(this));
         this.btnPanDown.addEventListener('click', function(){this.panImage(0, 1)}.bind(this));
         this.btnPanLeft.addEventListener('click', function(){this.panImage(-1, 0)}.bind(this));
+
+        //Keystroke shortcuts.
+        window.addEventListener('keydown', function(e){ 
+            if (e.altKey){
+              if (e.key === '+'){
+                this.scaleImage(true);
+              }
+              if (e.key === '-'){
+                console.log('shrinking...');
+                this.scaleImage(false);
+              }
+            }
+        }.bind(this));
 
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
@@ -171,6 +200,7 @@ class HcmcMonocle{
             this.oneSurfaceImage.setAttribute('src', this.data.textMetadata.imageBaseUrl + this.data.surfaces[idx].imageUrl);
             this.collection.style.display = 'none';
             this.oneSurface.style.display = 'block';
+            this.panelShowing = HcmcMonocle.PANELS.ONESURFACE;
         }
         else{
             console.log('The surface image with this index was not found: ' + idx);
@@ -240,6 +270,7 @@ class HcmcMonocle{
         }
         this.oneSurface.style.display = 'none';
         this.collection.style.display = 'block';
+        this.panelShowing = HcmcMonocle.PANELS.COLLECTION;
     }
 
     /** 
@@ -259,17 +290,19 @@ class HcmcMonocle{
     *              rotation bit (if it's there), increments it and puts it back.
     */
     rotateImage(){
-        let img = this.oneSurfaceImage;
-        if (img !== null){
-            let currRot = img.style.rotate;
-            if (currRot.match(/\d+deg/)){
-                currRot = parseInt(currRot);
+        if (this.panelShowing === HcmcMonocle.PANELS.ONESURFACE){
+            let img = this.oneSurfaceImage;
+            if (img !== null){
+                let currRot = img.style.rotate;
+                if (currRot.match(/\d+deg/)){
+                    currRot = parseInt(currRot);
+                }
+                else{
+                    currRot = 0;
+                }
+                currRot += this.rotateFactor;
+                img.style.rotate = currRot + 'deg';
             }
-            else{
-                currRot = 0;
-            }
-            currRot += this.rotateFactor;
-            img.style.rotate = currRot + 'deg';
         }
     }
 
@@ -281,17 +314,19 @@ class HcmcMonocle{
     * @param {boolean} enlarge Boolean value to specify whether to enlarge or shrink.
     */
     scaleImage(enlarge){
-        let img = this.oneSurfaceImage;
-        if (img !== null){
-            let currScale = img.style.scale;
-            if (currScale.match(/[\d\.]+/)){
-                currScale = parseFloat(currScale);
+        if (this.panelShowing === HcmcMonocle.PANELS.ONESURFACE){
+            let img = this.oneSurfaceImage;
+            if (img !== null){
+                let currScale = img.style.scale;
+                if (currScale.match(/[\d\.]+/)){
+                    currScale = parseFloat(currScale);
+                }
+                else{
+                    currScale = 1.0;
+                }
+                let newScale = parseFloat(currScale + (enlarge? this.scaleFactor : this.scaleFactor * -1));
+                img.style.scale = newScale;
             }
-            else{
-                currScale = 1.0;
-            }
-            let newScale = parseFloat(currScale + (enlarge? this.scaleFactor : this.scaleFactor * -1));
-            img.style.scale = newScale;
         }
     }
 
@@ -303,23 +338,25 @@ class HcmcMonocle{
     * @param {integer} y A value of -1, 1, or 0 to control vertical panning.
     */
     panImage(x, y){
-        let img = this.oneSurfaceImage;   
-        let currX, currY, newX, newY;[0-9]
-        if (img !== null){
-            //Get the current values.
-            let currTrans = this.oneSurfaceImage.style.translate; //A string.
-            if (currTrans.match(/-?\d+%\s+-?\d+%/)){
-                let bits = currTrans.split(/\s+/);
-                currX = parseInt(bits[0]);
-                currY = parseInt(bits[1]);
+        if (this.panelShowing === HcmcMonocle.PANELS.ONESURFACE){
+            let img = this.oneSurfaceImage;   
+            let currX, currY, newX, newY;[0-9]
+            if (img !== null){
+                //Get the current values.
+                let currTrans = this.oneSurfaceImage.style.translate; //A string.
+                if (currTrans.match(/-?\d+%\s+-?\d+%/)){
+                    let bits = currTrans.split(/\s+/);
+                    currX = parseInt(bits[0]);
+                    currY = parseInt(bits[1]);
+                }
+                else{
+                    currX = 0;
+                    currY = 0;
+                }
+                newX = (x * this.panFactor) + currX;
+                newY = (y * this.panFactor) + currY;
+                img.style.translate = newX + '% ' + newY + '%';
             }
-            else{
-                currX = 0;
-                currY = 0;
-            }
-            newX = (x * this.panFactor) + currX;
-            newY = (y * this.panFactor) + currY;
-            img.style.translate = newX + '% ' + newY + '%';
         }
     }
 
@@ -330,14 +367,16 @@ class HcmcMonocle{
     * for scrolling.
     */
     resetImage(){
-        if ((this.oneSurface !== null)&&(this.oneSurfaceImage !== null)){
-            let img = this.oneSurfaceImage;
-            //Fix the scale.
-            img.style.scale = 1;
-            //Fix the rotation.
-            img.style.rotate = 'none';
-            //Fix the pan.
-            img.style.translate = '0% 0%';
+        if (this.panelShowing === HcmcMonocle.PANELS.ONESURFACE){
+            if ((this.oneSurface !== null)&&(this.oneSurfaceImage !== null)){
+                let img = this.oneSurfaceImage;
+                //Fix the scale.
+                img.style.scale = 1;
+                //Fix the rotation.
+                img.style.rotate = 'none';
+                //Fix the pan.
+                img.style.translate = '0% 0%';
+            }
         }
     }
 }
