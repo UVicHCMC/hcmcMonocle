@@ -1,7 +1,20 @@
 /* Basic CSS file to get started; pszpak will develop further. */
+:root{
+    --btnBgColor: #b0b0b0;
+    --hiBtnBgColor: #d0d0d0;
+}
+
 h1, h2{
     text-align: center;
 }
+
+button{
+    background-color: var(--btnBgColor);
+    &:focus, &:hover{
+        background-color: var(--hiBtnBgColor);
+    }
+}
+
 div#thumbnails{
     display: flex; 
     flex-direction: row; 
@@ -41,6 +54,35 @@ div#oneSurfaceControls{
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+}
+div#panControls{
+    background-color: var(--btnBgColor);
+    display: grid;
+    grid-template-columns: [cOne] 33.3% [cTwo] 33.3% [cThree] 33.3%;
+    grid-template-rows: [rOne] auto [rTwo] auto [rThree] auto;
+    button{
+        font-size: 1.7rem;
+        line-height: 1;
+        text-align: center;
+        vertical-align: middle;
+        border-style: none;
+    } 
+    #btnPanUp{
+        grid-row: rOne;
+        grid-column: cTwo;
+    }
+    #btnPanRight{
+        grid-row: rTwo;
+        grid-column: cThree;
+    }
+    #btnPanDown{
+        grid-row: rThree;
+        grid-column: cTwo;
+    }
+    #btnPanLeft{
+        grid-row: rTwo;
+        grid-column: cOne;
+    }
 }
 div#ctlLeftRight{
     display: flex;
