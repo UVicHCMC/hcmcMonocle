@@ -281,10 +281,25 @@ class HcmcMonocle{
         //TODO: Logic for displaying metadata.
         console.log('Showing project metadata...');
         this.facsTitle.innerHTML = this.data.facsTitleMain;
+        let rows = new Array();
         for (let md of ['authority', 'availability', 'source']){
             let caption = this.propNameToCaption(md);
-
+            let tr = document.createElement('tr');
+            let td1 = document.createElement('td');
+            td1.appendChild(document.createTextNode(caption));
+            let td2 = document.createElement('td');
+            td2.appendChild(document.createTextNode(this.data.textMetadata[md]));
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            rows.push(tr);
         }
+        let t = document.createElement('table');
+        let tb = document.createElement('tbody');
+        t.appendChild(tb);
+        for (let tr of rows){
+            tb.appendChild(tr);
+        }
+        this.facsMetadata.appendChild(t);
     }
 
     /** 
@@ -296,7 +311,8 @@ class HcmcMonocle{
      *  @return {string} A title-case caption.
     */
     propNameToCaption(propName){
-
+        let str = propName.replace(/([a-z])([A-Z])/, '$1 $2');
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
     /**

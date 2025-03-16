@@ -25,6 +25,21 @@ div#thumbnails{
         cursor: pointer;
     }
 }
+
+div#facsMetadata table{
+    width: 80%;
+    margin-left: 10%;
+    border: solid 1pt var(--btnBgColor);
+    border-collapse: collapse;
+    td{
+        border: solid 1pt var(--btnBgColor);
+        padding: 0.25em;
+    }
+    tr>td:first-child{
+        font-weight: bold;
+    }
+}
+
 div#figWrapper{
     display: grid;
     grid-template-columns: 6rem 1fr 6rem;
