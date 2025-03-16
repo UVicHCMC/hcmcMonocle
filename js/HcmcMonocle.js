@@ -281,6 +281,22 @@ class HcmcMonocle{
         //TODO: Logic for displaying metadata.
         console.log('Showing project metadata...');
         this.facsTitle.innerHTML = this.data.facsTitleMain;
+        for (let md of ['authority', 'availability', 'source']){
+            let caption = this.propNameToCaption(md);
+
+        }
+    }
+
+    /** 
+     *  @function HcmcMonocle~proNameToCaption 
+     *  @description This converts a camel-case property name
+     *               into a title-case caption.
+     *  @param {string} propName The name of the property, often
+     *               derived from a TEI element name.
+     *  @return {string} A title-case caption.
+    */
+    propNameToCaption(propName){
+
     }
 
     /**
