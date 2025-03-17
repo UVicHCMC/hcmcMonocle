@@ -106,6 +106,11 @@ class HcmcMonocle{
             }
         }.bind(this));
 
+        //Add handlers for pointer events on the image.
+        this.oneSurfaceImage.addEventListener('pointerdown', function(e){this.pointerDown(e);}.bind(this));
+        this.oneSurfaceImage.addEventListener('pointermove', function(e){this.pointerMove(e);}.bind(this));
+        this.oneSurfaceImage.addEventListener('pointerup', function(e){this.pointerUp(e);}.bind(this));
+
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
 
@@ -411,5 +416,33 @@ class HcmcMonocle{
             }
         }
     }
+
+    /**
+     * @function HcmcMonocle~pointerDown
+     * @description Handler for the pointerDown event on the oneSurfaceImage.
+     * @param {Event} e The event received.
+     */
+    pointerDown(e){
+        console.log('pointerDown event.');
+    }
+
+    /**
+     * @function HcmcMonocle~pointerMove
+     * @description Handler for the pointerMove event on the oneSurfaceImage.
+     * @param {Event} e The event received.
+     */
+    pointerMove(e){
+        console.log('pointerMove event.');
+    }
+
+    /**
+     * @function HcmcMonocle~pointerUp
+     * @description Handler for the pointerUp event on the oneSurfaceImage.
+     * @param {Event} e The event received.
+     */
+    pointerUp(e){
+        console.log('pointerUp event.');
+    }
+
 }
     
