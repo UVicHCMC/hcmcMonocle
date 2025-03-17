@@ -67,6 +67,7 @@ class HcmcMonocle{
         this.scaleFactor = 0.2;
         this.panFactor = 5; //This is a percentage.
         this.rotateFactor = 45; //degrees
+        this.panStart = [0, 0]; //A default translate starting point.
 
         //These are the ids of elements on the page we need to connect to.
         this.requiredIds = new Array('facsTitle', 'facsMetadata', 'collection', 'thumbnails',
@@ -424,6 +425,7 @@ class HcmcMonocle{
      */
     pointerDown(e){
         console.log('pointerDown event.');
+        this.panStart = [e.pageX, e.pageY];
     }
 
     /**
