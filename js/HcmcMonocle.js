@@ -71,7 +71,8 @@ class HcmcMonocle{
 
         //These are the ids of elements on the page we need to connect to.
         this.requiredIds = new Array('facsTitle', 'facsMetadata', 'collection', 'thumbnails',
-                                     'oneSurface', 'oneSurfaceFigure', 'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
+                                     'oneSurface', 'oneSurfaceFigure', 'oneSurfaceImage', 
+                                     'oneSurfaceMetadata', 'btnPanUp', 'btnPanRight', 
                                      'btnPanDown', 'btnPanLeft', 'btnPlus', 'btnMinus', 
                                      'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 
                                      'btnRight');
@@ -204,9 +205,18 @@ class HcmcMonocle{
             //Logic for displaying a surface.
             this.currSurface = idx;
             this.oneSurfaceImage.setAttribute('src', this.data.textMetadata.imageBaseUrl + this.data.surfaces[idx].imageUrl);
+            this.oneSurfaceMetadata.innerHTML = '';
+            for (let l of this.data.surfaces[idx].links){
+                let a = document.createElement('a');
+                let t = document.createTextNode(l.caption);
+                a.setAttribute('href', l.link);
+                a.appendChild(t);
+                this.oneSurfaceMetadata.appendChild(a);
+            }
             this.collection.style.display = 'none';
             this.oneSurface.style.display = 'block';
             this.panelShowing = HcmcMonocle.PANELS.ONESURFACE;
+            this.oneSurfaceMetadata.style.display = 'block';
         }
         else{
             console.log('The surface image with this index was not found: ' + idx);
@@ -275,6 +285,7 @@ class HcmcMonocle{
             }
         }
         this.oneSurface.style.display = 'none';
+        this.oneSurfaceMetadata.style.display = 'none';
         this.collection.style.display = 'block';
         this.panelShowing = HcmcMonocle.PANELS.COLLECTION;
     }

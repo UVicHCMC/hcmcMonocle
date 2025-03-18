@@ -40,6 +40,11 @@ div#facsMetadata table{
     }
 }
 
+div#oneSurfaceMetadata a{
+    display: inline-block;
+    margin: auto 1em;
+}
+
 div#figWrapper{
     display: grid;
     grid-template-columns: 6rem 1fr 6rem;
