@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://hcmc.uvic.ca/schemas/hcmcMonocle.json",
     "title": "JSON Schema for hcmcMonocle Facsimiles",
-    "description": "This schema describes the JSON structure required by the hcmcMonocle application. Any JSON document conforming to this schema should be processable by hcmcMonocle.",
+    "description": "This schema describes the JSON structure required by the hcmcMonocle application for a single facsimile (collection of pages). Any JSON document conforming to this schema should be processable by hcmcMonocle.",
     "type": "object",
     "properties": {
         "facsTitleMain": {
@@ -14,7 +14,7 @@
             "type": "string"
         },
         "facsTitleFull": {
-            "description": "The full of the facsimile text",
+            "description": "The full title of the facsimile text",
             "type": "string"
         },
         "textMetadata": {
