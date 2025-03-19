@@ -71,6 +71,7 @@ div#figWrapper{
         transition-property: scale, translate, rotate;
         transition-duration: 0.3s;
         cursor: grab;
+        touch-action: none;
     }
     button{
         font-size: 3rem;

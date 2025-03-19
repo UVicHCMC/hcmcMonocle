@@ -64,9 +64,12 @@ class HcmcMonocle{
         this.panelShowing = HcmcMonocle.PANELS.NONE;
 
         //Properties to control granularity of image scaling, rotating, and panning.
-        this.scaleFactor = 0.2;     //The factor by which we change size each time.
-        this.panFactor = 5;         //This is a percentage.
-        this.rotateFactor = 45;     //degrees
+        //Scaling:
+        this.scaleStart = 1;        //The initial scale.
+        this.scaleFactor = 0.2;     //The factor by which we change size each time when using buttons.
+        this.rotateStart = 0;       //The initial unrotated value.
+        this.rotateFactor = 45;     //The factor (degrees) by which we rotate the image per button press.
+        this.panFactor = 5;         //The factor (percentage) by which we pan when a button is pressed.
         this.panStart = [0, 0];     //A default translate starting point.
         this.panTranslate = [0, 0]  //For tracking the current pan position.
         this.isPanning = false;     //For tracking whether we're panning with the pointer or not.
