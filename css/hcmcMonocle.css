@@ -40,10 +40,15 @@ div#facsMetadata table{
     }
 }
 
-div#oneSurfaceMetadata a{
-    display: inline-block;
-    margin: auto 1em;
+div#oneSurfaceMetadata{
+    text-align: center;
+    a{
+        display: inline-block;
+        margin: auto 1em;
+    }
 }
+
+
 
 div#figWrapper{
     display: grid;
