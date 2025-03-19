@@ -64,10 +64,12 @@ class HcmcMonocle{
         this.panelShowing = HcmcMonocle.PANELS.NONE;
 
         //Properties to control granularity of image scaling, rotating, and panning.
-        this.scaleFactor = 0.2;
-        this.panFactor = 5; //This is a percentage.
-        this.rotateFactor = 45; //degrees
-        this.panStart = [0, 0]; //A default translate starting point.
+        this.scaleFactor = 0.2;     //The factor by which we change size each time.
+        this.panFactor = 5;         //This is a percentage.
+        this.rotateFactor = 45;     //degrees
+        this.panStart = [0, 0];     //A default translate starting point.
+        this.panTranslate = [0, 0]  //For tracking the current pan position.
+        this.isPanning = false;     //For tracking whether we're panning with the pointer or not.
 
         //These are the ids of elements on the page we need to connect to.
         this.requiredIds = new Array('facsTitle', 'facsMetadata', 'collection', 'thumbnails',
@@ -112,6 +114,7 @@ class HcmcMonocle{
         this.oneSurfaceImage.addEventListener('pointerdown', function(e){this.pointerDown(e);}.bind(this));
         this.oneSurfaceImage.addEventListener('pointermove', function(e){this.pointerMove(e);}.bind(this));
         this.oneSurfaceImage.addEventListener('pointerup', function(e){this.pointerUp(e);}.bind(this));
+        this.oneSurfaceImage.addEventListener('pointerleave', function(e){this.pointerLeave(e);}.bind(this));
 
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
@@ -435,8 +438,12 @@ class HcmcMonocle{
      * @param {Event} e The event received.
      */
     pointerDown(e){
+        e.preventDefault();
         console.log('pointerDown event.');
-        this.panStart = [e.pageX, e.pageY];
+        this.isPanning = true;
+        //Get the current translate settings.
+        this.panStart = [e.clientX - this.panTranslate[0], e.clientY - this.panTranslate[1]];
+        this.oneSurfaceImage.style.cursor = 'grabbing';
     }
 
     /**
@@ -445,7 +452,13 @@ class HcmcMonocle{
      * @param {Event} e The event received.
      */
     pointerMove(e){
+        e.preventDefault();
         console.log('pointerMove event.');
+        if (!this.isPanning){
+            return;
+        }
+        this.panTranslate = [e.clientX - this.panStart[0], e.clientY - this.panStart[1]];
+        this.oneSurfaceImage.style.translate = this.panTranslate[0] + 'px ' + this.panTranslate[1] + 'px';
     }
 
     /**
@@ -454,7 +467,22 @@ class HcmcMonocle{
      * @param {Event} e The event received.
      */
     pointerUp(e){
+        e.preventDefault();
         console.log('pointerUp event.');
+        this.isPanning = false;
+        this.oneSurfaceImage.style.cursor = 'grab';
+    }
+
+    /**
+     * @function HcmcMonocle~pointerLeave
+     * @description Handler for the pointerLkeave event on the oneSurfaceImage.
+     * @param {Event} e The event received.
+     */
+    pointerLeave(e){
+        e.preventDefault();
+        console.log('pointerLeave event.');
+        this.isPanning = false;
+        this.oneSurfaceImage.style.cursor = 'grab';
     }
 
 }
