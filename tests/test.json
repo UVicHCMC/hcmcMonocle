@@ -1,0 +1,41 @@
+{
+    "$schema": "../schemas/hcmcMonocleAnthology.jschema",
+    "anthologyTitleMain": "",
+    "anthologyTitleShort": "",
+    "anthologyTitleFull": "",
+    "anthologyMetadata": {
+        "authority": "",
+        "availability": "",
+        "source": ""
+    },
+    "facsimiles": 
+    [
+        {
+            "facsTitleMain": "Test facsimile title main",
+            "facsTitleShort": "Test facsimile title short",  
+            "facsTitleFull": "Test facsimile title full", 
+            "facsMetadata": {
+                "imageBaseUrl": "https://lemdo.uvic.ca/facsimiles/Test/",
+                "thumbnailBaseUrl": "https://lemdo.uvic.ca/facsimiles/Test/thumbs/",
+                "linkBaseUrl": "./",
+                "authority": "Test authority",
+                "availability": "Test availability",
+                "source": "Test source",
+                "titlePageIndex": 4     
+             },
+             "surfaces": [
+                 {
+                     "imageUrl": "Test_0001.jpg",
+                     "thumbnailUrl": "Test_0001.jpg",
+                     "links": [
+                         {
+                             "caption": "Test link caption",
+                             "url": "emdTest_Q1.html#Test_Q1_0001" 
+                         }
+                     ],
+                     "surfaceMetadata": "Test surface metadata" 
+                 }
+             ] 
+        }
+    ]
+}

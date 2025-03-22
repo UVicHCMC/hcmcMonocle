@@ -21,120 +21,133 @@
             "description": "Anthology-level metadata",
             "type": "object",
             "properties": {
-                "authority":{
+                "authority": {
                     "description": "The name of a person or other agency responsible for making the anthology facsimiles available, other than a publisher or distributor.",
-                    "type": "string" 
+                    "type": "string"
                 },
-                "availability":{
+                "availability": {
                     "description": "Conditions on use or distribution of the facsimile images, copyright status, licence information, etc.",
                     "type": "string"
                 },
-                "source":{
-                    "description": "Information about the source document(s) for which this anthology provides digital surrogates." ,
-                    "type": "string" 
-                } 
+                "source": {
+                    "description": "Information about the source document(s) for which this anthology provides digital surrogates.",
+                    "type": "string"
+                }
             }
-        }, 
+        },
         "facsimiles": {
             "description": "The set of facsimiles constituting this collection",
             "type": "array",
             "items": {
-                "description": "An array of facsimile descriptions.", 
+                "description": "An array of facsimile descriptions.",
                 "type": "object",
                 "properties": {
-                        "facsTitleMain": {
-                            "description": "The main title of the facsimile text",
-                            "type": "string"
-                        },
-                        "facsTitleShort": {
-                            "description": "The short of the facsimile text",
-                            "type": "string"
-                        },
-                        "facsTitleFull": {
-                            "description": "The full title of the facsimile text",
-                            "type": "string"
-                        },
-                        "facsMetadata": {
-                            "description": "Text-level metadata for the facsimile",
+                    "facsTitleMain": {
+                        "description": "The main title of the facsimile text",
+                        "type": "string"
+                    },
+                    "facsTitleShort": {
+                        "description": "The short of the facsimile text",
+                        "type": "string"
+                    },
+                    "facsTitleFull": {
+                        "description": "The full title of the facsimile text",
+                        "type": "string"
+                    },
+                    "facsMetadata": {
+                        "description": "Text-level metadata for the facsimile",
+                        "type": "object",
+                        "properties": {
+                            "imageBaseUrl": {
+                                "description": "The location where images are to be found. If empty, full URLs to images will be included for each surface.",
+                                "type": "string"
+                            },
+                            "thumbnailBaseUrl": {
+                                "description": "The location where thumbnails are to be found. If empty, either full URLs to thumbnails will be included for each surface, or no thumbnails are available.",
+                                "type": "string"
+                            },
+                            "linkBaseUrl": {
+                                "description": "The base URL from which relative links in the surface items are to be calculated",
+                                "type": "string"
+                            },
+                            "authority": {
+                                "description": "The name of a person or other agency responsible for making the facsimile available, other than a publisher or distributor.",
+                                "type": "string"
+                            },
+                            "availability": {
+                                "description": "Conditions on use or distribution of the facsimile images, copyright status, licence information, etc.",
+                                "type": "string"
+                            },
+                            "source": {
+                                "description": "Information about the source document for which this facsimile is a digital surrogate.",
+                                "type": "string"
+                            },
+                            "titlePageIndex": {
+                                "description": "The index of the surface which should serve as the representative page for this facsimile when viewing the anthology thumbnails. If empty or less than zero, the first surface will be used.",
+                                "type": "integer"
+                            }
+                        }
+                    },
+                    "surfaces": {
+                        "description": "The sequence of digital surrogates in this facsimile",
+                        "type": "array",
+                        "items": {
+                            "description": "A single facsimile surface in the array.",
                             "type": "object",
                             "properties": {
-                                "imageBaseUrl": {
-                                    "description": "The location where images are to be found. If empty, full URLs to images will be included for each surface.",
+                                "imageUrl": {
+                                    "description": "Full path to image, or relative path based on imageBaseUrl.",
                                     "type": "string"
                                 },
-                                "thumbnailBaseUrl": {
-                                    "description": "The location where thumbnails are to be found. If empty, either full URLs to thumbnails will be included for each surface, or no thumbnails are available.",
+                                "thumbnailUrl": {
+                                    "description": "Full path to thumbnail, or relative path based on thumbnailBaseUrl.",
                                     "type": "string"
                                 },
-                                "linkBaseUrl": {
-                                    "description": "The base URL from which relative links in the surface items are to be calculated",
-                                    "type": "string"
-                                },
-                                "authority":{
-                                    "description": "The name of a person or other agency responsible for making the facsimile available, other than a publisher or distributor.",
-                                    "type": "string"
-                                },
-                                "availability":{
-                                    "description": "Conditions on use or distribution of the facsimile images, copyright status, licence information, etc.",
-                                    "type": "string"
-                                },
-                                "source":{
-                                    "description": "Information about the source document for which this facsimile is a digital surrogate." ,
-                                    "type": "string"
-                                },
-                                "titlePageIndex":{
-                                    "description": "The index of the surface which should serve as the representative page for this facsimile when viewing the anthology thumbnails. If empty or less than zero, the first surface will be used.",
-                                    "type": "integer"
-                                } 
-                            }
-                        },
-                        "surfaces": {
-                            "description": "The sequence of digital surrogates in this facsimile",
-                            "type": "array",
-                            "items": {
-                                "description": "An array of facsimile images.",
-                                "type": "object",
-                                "properties": {
-                                    "imageUrl":{
-                                        "description": "Full path to image, or relative path based on imageBaseUrl.",
-                                        "type": "string"
-                                    },
-                                    "thumbnailUrl":{
-                                        "description": "Full path to thumbnail, or relative path based on thumbnailBaseUrl.",
-                                        "type": "string"
-                                    },
-                                    "links":{
-                                        "description": "A list of zero or more Urls with captions which relate to this surface.",
-                                        "type": "array",
-                                        "items": {
-                                            "description": "Components of a web link.",
-                                            "type": "object",
-                                            "properties": {
-                                                "caption": {
-                                                    "description": "The text which will become a link to the digital edition location.",
-                                                    "type": "string"
-                                                },
-                                                "link":{
-                                                    "description": "An absolute URI, or a URI relative to the linkBaseUrl",
-                                                    "type": "string"
-                                                }
+                                "links": {
+                                    "description": "A list of zero or more Urls with captions which relate to this surface.",
+                                    "type": "array",
+                                    "items": {
+                                        "description": "Components of a web link.",
+                                        "type": "object",
+                                        "properties": {
+                                            "caption": {
+                                                "description": "The text which will become a link to the digital edition location.",
+                                                "type": "string"
                                             },
-                                            "minItems": 0,
-                                            "required": ["caption"]
-                                        }
-                                    },
-                                    "surfaceMetadata":{
-                                        "description": "Metadata about this specific surface.",
-                                        "type": "string"
+                                            "link": {
+                                                "description": "An absolute URI, or a URI relative to the linkBaseUrl",
+                                                "type": "string"
+                                            }
+                                        },
+                                        "minItems": 0,
+                                        "required": ["caption"]
                                     }
+                                },
+                                "surfaceMetadata": {
+                                    "description": "Metadata about this specific surface.",
+                                    "type": "string"
                                 }
                             },
-                            "minItems": 1
-                        }
+                            "required": [
+                                "imageUrl",
+                                "thumbnailUrl"
+                            ]
+                        },
+                        "minItems": 1
                     }
-                },"minItems": 1,
-            "required": [ "facsTitleMain", "facsMetadata", "surfaces" ]
-        } 
+                }
+            },
+            "minItems": 1,
+            "required": [
+                "facsTitleMain",
+                "facsMetadata",
+                "surfaces"
+            ]
+        }
     },
-    "required": [ "anthologyTitleMain", "anthologyMetadata", "facsimiles" ]
+    "required": [
+        "anthologyTitleMain",
+        "anthologyMetadata",
+        "facsimiles"
+    ]
 }
