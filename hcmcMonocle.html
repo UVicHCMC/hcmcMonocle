@@ -2,48 +2,85 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <!-- THIS IS A ROUGH DRAFT CONTAINER FOR DEVELOPMENT PURPOSES. -->
     <!-- PAT WILL REWORK IT AS HE WISHES. -->
+
+    <!-- Key terms:
+        anthology:      a collection of facsimiles
+        facs/facsimile: a collection of images belonging to one
+                        text
+        surface:        a single image, being a page or an opening.
+                        We use this term because it is used in TEI. 
+    -->
     
     <head xmlns="http://www.w3.org/1999/xhtml">
         <meta charset="UTF-8"/>
         <title>HCMC Monocle Facsimile Viewer</title>
         <link rel="stylesheet" href="css/hcmcMonocle.css"/>
         <script src="js/HcmcMonocle.js"> </script>
+        <!-- NOTE: favicon is required. -->
+        <!--
         <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
         <link rel="icon" type="image/png" href="favicon.png"/>
+        -->
     </head>
     <body>
         
         <header>
+            <!-- This is most likely going to be hidden, or 
+                 replaced with a changing anthology title. -->
             <h2>HCMC Monocle Facsimile Viewer</h2>
-            <h1 id="facsTitle"></h1>
+            <!-- This will be the title of whatever is being 
+                 displayed at the time: anthology thumbnails,
+                 thumbnails for a single facsimile, or a single
+                 surface. -->
+            <h1 id="currTitle"></h1>
         </header>
        
         <!-- The JavaScript HcmcMonocle object will know about these div ids
              and use them to show content. They can be changed as required, 
              but the JS will have to be updated to match. -->
         
-        <div id="facsMetadata">
-            <!-- Metadata for the facsimile collection as a whole will 
-                 be displayed here. -->
-            
+        <div id="currMetadata">
+            <!-- Metadata for the current thing (facs, anthology
+                 or surface) will be displayed here. -->
+            <!-- This is the main metadata for an anthology or a
+                 facsimile. -->
+            <div id="currMetadataMain">
+
+            </div>
+            <!-- This is going to be a table of contents for a 
+                 facsimile, showing whenever the current display 
+                 shows the thumbnails of that facsimile or a 
+                 single surface from it. -->
+            <div id="currMetadataToc">
+
+            </div>
         </div>
-       
+
+        <!-- Single-surface content will be displayed in here. -->
         <div id="oneSurface">
-            <!-- Single-surface content will be displayed in here. -->
             
-            <div id="oneSurfaceMetadata">
-                <!-- Metadata (if any) for the individual Surface will 
-                     be displayed here.-->
+            <div id="oneSurfaceLinks">
+                <!-- In here will be links back to the anthology page 
+                     locations matching this image. Question: 
+                     should this be a figcaption in the figure 
+                     element below? -->
             </div>
             
             <div id="figWrapper">
+                <!-- This may not be needed, but there may be some 
+                     controls that should be displayed to the left
+                     of the main image. -->
                 <div id="controlsLeft">
                     
                 </div>
+                <!-- This is the figure for the actual image of the surface.-->
                 <figure id="oneSurfaceFigure">
                     <!-- The image itself goes in here. -->
                     <img id="oneSurfaceImage" src="favicon.svg"/>
                 </figure>
+
+                <!-- This is the collection of controls on the right of 
+                     the image. -->
                 <div id="oneSurfaceControls">
                     <div id="panControls">
                         <button id="btnPanUp">△</button>
@@ -62,13 +99,11 @@
                     </div>
                 </div>
             </div>
-            
-            <div id="oneSurfaceLinks">
-                <!-- In here will be links back to the anthology page 
-                     locations matching this image. -->
-            </div>
         </div>
         
+        <!-- The collection panel is used to display either thumbnails of
+             the title pages of each facsimile in the anthology, or the 
+             thumbnails of each surface in the selected facsimile. -->
         <div id="collection">
             <!-- In here will go all the thumbnails, functioning as 
                  links to the actual pages. -->
@@ -77,13 +112,6 @@
             </div>
             
         </div>
-        
-        <div id="listing">
-            <!-- In here will go the listing of all the facsimile files in this anthology. -->
-            
-        </div>
-
-
     </body>
     
 </html>
