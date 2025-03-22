@@ -76,12 +76,12 @@ class HcmcMonocle{
         this.isPanning = false;     //For tracking whether we're panning with the pointer or not.
 
         //These are the ids of elements on the page we need to connect to.
-        this.requiredIds = new Array('facsTitle', 'facsMetadata', 'collection', 'thumbnails',
-                                     'oneSurface', 'oneSurfaceFigure', 'oneSurfaceImage', 
-                                     'listing', 'oneSurfaceMetadata', 'btnPanUp', 'btnPanRight', 
+        this.requiredIds = new Array('currTitle', 'currMetadata', 'currMetadataMain', 'currMetadataToc',
+                                     'oneSurface', 'oneSurfaceLinks', 'oneSurfaceFigure', 
+                                     'oneSurfaceImage', 'oneSurfaceMetadata', 'btnPanUp', 'btnPanRight', 
                                      'btnPanDown', 'btnPanLeft', 'btnPlus', 'btnMinus', 
                                      'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 
-                                     'btnRight');
+                                     'btnRight', 'collection', 'thumbnails');
                                     
         //Find each of thest things and connect it to a property.                             
         for (let id of this.requiredIds){
@@ -123,38 +123,39 @@ class HcmcMonocle{
         //Figure out our config parameters based on the document URI.
         let searchParams = new URLSearchParams(decodeURI(document.location.search));
 
-        //Create an object to hold the data for a single facsimile.
-        this.facsData = {};
-
-        //Create an object to hold the data for the entire listing.
-        this.listingData = {};
+        //Create an object to hold the data from the anthology file.
+        this.data = {};
 
         this.loaded = false;
 
-        //Figure out if there's a listing page.
-        this.listingJsonUri = null;
+        //Figure out if there's a json file to load.
+        this.jsonUri = null;
 
-        if (searchParams.has('listing')){
-            this.listingJsonUri = searchParams.get('listing').trim();
-            this.populateListing();
+        if (searchParams.has('anthology')){
+            this.jsonUri = searchParams.get('anthology').trim();
+            this.loadData();
         }
+
+        //Figure out if there's a facsimile to default to showing.
+        this.targFacs = searchParams.get('facs').trim() ?? null;
 
         //Figure out the target image to show first, if there is one.
-        this.targSurface = null;
-        
-        if (searchParams.has('targSurface')){
-            this.targSurface = searchParams.get('targSurface').trim();
-        }
-
-        //Now look for a JSON file to get.
-        this.facsJsonUri = null;
-
-        if (searchParams.has('facs')){
-            this.facsJsonUri = searchParams.get('facs').trim();
-            //Retrieve the JSON to populate the object.
-            this.populateFacs();
-        }
+        this.targSurface = searchParams.get('surface').trim() ?? null;
       }
+
+    /** 
+      * @function HcmcMonocle~loadData
+      * @description This attempts to retrieve the JSON 
+      *              file and populate the internal object. 
+      */
+    async loadData(){
+        const request = new Request(this.jsonUri);
+        const response = await fetch(request, this.fetchHeaders);
+        const json = await response.json();
+        this.data = json;
+        this.loaded = true;
+        this.display();
+    }
     
     /** 
       * @function HcmcMonocle~populateFacs
