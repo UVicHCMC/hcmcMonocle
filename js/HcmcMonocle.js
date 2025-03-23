@@ -57,9 +57,6 @@ class HcmcMonocle{
             referrer: 'no-referrer'
         };
 
-        //Property to keep track of the current image that's showing.
-        this.currSurface = -1;
-
         //Property to track whether the collection of thumbnails or the 
         //oneSurface view is showing.
         this.panelShowing = HcmcMonocle.PANELS.NONE;
@@ -141,6 +138,10 @@ class HcmcMonocle{
 
         //Figure out the target image to show first, if there is one.
         this.targSurface = searchParams.get('surface').trim() ?? null;
+
+        //We'll track what's actually showing with these variables.
+        this.currFacs = -1;
+        this.currSurface = -1;
       }
 
     /** 
@@ -156,36 +157,6 @@ class HcmcMonocle{
         this.loaded = true;
         this.display();
     }
-    
-    /** 
-      * @function HcmcMonocle~populateFacs
-      * @description This attempts to retrieve the JSON facsimile
-      *              file and populate the internal object. It is
-      *              async.
-      */
-    async populateFacs(){
-        const request = new Request(this.facsJsonUri);
-        const response = await fetch(request, this.fetchHeaders);
-        const json = await response.json();
-        this.facsData = json;
-        this.loaded = true;
-        this.display();
-    }
-
-    /** 
-      * @function HcmcMonocle~populateListing
-      * @description This attempts to retrieve the JSON listing
-      *              file and populate the internal object. It is
-      *              async.
-      */
-        async populateListing(){
-            const request = new Request(this.listingJsonUri);
-            const response = await fetch(request, this.fetchHeaders);
-            const json = await response.json();
-            this.listingData = json;
-            this.loaded = true;
-            this.display();
-        }
 
     /** 
      * @function HcmcMonocle~display 
@@ -195,7 +166,7 @@ class HcmcMonocle{
      *              images in the background.
     */
     display(){
-        this.showMetadata();
+        this.showAnthologyMetadata();
         if (this.targSurface != null){
             this.showSurfaceByUrl(this.targSurface);
         }
