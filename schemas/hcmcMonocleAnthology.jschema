@@ -42,6 +42,10 @@
                 "description": "An array of facsimile descriptions.",
                 "type": "object",
                 "properties": {
+                    "facsId": {
+                        "description": "The unique identifier for the facsimile.",
+                        "type": "string"
+                    }, 
                     "facsTitleMain": {
                         "description": "The main title of the facsimile text",
                         "type": "string"

@@ -123,7 +123,11 @@ class HcmcMonocle{
         //Create an object to hold the data from the anthology file.
         this.data = {};
 
+        //Track whether we're loaded or not. May not be needed.
         this.loaded = false;
+
+        //A map indexing the facsimile array by string.
+        this.facsMap = new Map();
 
         //Figure out if there's a json file to load.
         this.jsonUri = null;
@@ -131,6 +135,9 @@ class HcmcMonocle{
         if (searchParams.has('anthology')){
             this.jsonUri = searchParams.get('anthology').trim();
             this.loadData();
+        }
+        else{
+            console.error('ERROR: No anthology JSON file supplied.');
         }
 
         //Figure out if there's a facsimile to default to showing.
@@ -154,6 +161,10 @@ class HcmcMonocle{
         const response = await fetch(request, this.fetchHeaders);
         const json = await response.json();
         this.data = json;
+        //Populate our lookup maps for faster access to facsimiles.
+        for (let f in data.facsimiles){
+            this.facsMap.set(f.facsId, f);
+        }
         this.loaded = true;
         this.display();
     }
@@ -166,7 +177,9 @@ class HcmcMonocle{
      *              images in the background.
     */
     display(){
-        this.showAnthologyMetadata();
+        //We always include the 
+        this.populateAnthologyMetadata();
+
         if (this.targSurface != null){
             this.showSurfaceByUrl(this.targSurface);
         }
