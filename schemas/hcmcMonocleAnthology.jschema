@@ -99,6 +99,10 @@
                             "description": "A single facsimile surface in the array.",
                             "type": "object",
                             "properties": {
+                                "surfaceId": {
+                                    "description": "The unique id of the surface in the facsimile.",
+                                    "type": "string" 
+                                }, 
                                 "imageUrl": {
                                     "description": "Full path to image, or relative path based on imageBaseUrl.",
                                     "type": "string"
@@ -133,6 +137,7 @@
                                 }
                             },
                             "required": [
+                                "surfaceId",
                                 "imageUrl",
                                 "thumbnailUrl"
                             ]
@@ -143,6 +148,7 @@
             },
             "minItems": 1,
             "required": [
+                "facsId",
                 "facsTitleMain",
                 "facsMetadata",
                 "surfaces"

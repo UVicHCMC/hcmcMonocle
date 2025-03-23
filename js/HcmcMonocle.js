@@ -177,28 +177,27 @@ class HcmcMonocle{
      *              images in the background.
     */
     display(){
-        //We always include the 
+        //We always include the anthology metadata.
         this.populateAnthologyMetadata();
 
-        if (this.targSurface != null){
-            this.showSurfaceByUrl(this.targSurface);
+        //We populate the view with the selected facsimile first,
+        //if there is one. Note that if there is a target surface 
+        //but no specified containing facsimile, we don't try to 
+        //display the surface, since it would be too time-consuming
+        //to iterate through every facsimile's surfaces to find it.
+        if (this.targFacs != null){
+            this.showFacs(this.targFacs);
+        //And now, if there is a target surface, we display that.
+            if (this.targSurface != null){
+                this.showSurfaceByUrl(this.targSurface);
+            }
         }
+        //If a facsimile is not specified, we just show the anthology
+        //collection.
         else{
-            if (this.facsJsonUri != null){
-                this.showCollection();
+            if (this.data.anthologyTitleMain != null){
+                this.showAnthology();
             }
-            else{
-                if (this.listingJsonUri != null){
-                    this.showListing();
-                }
-            }
-        }
-        //Now we can start preloading images.
-        let arrImages = new Array();
-        for (let s of this.facsData.surfaces){
-            let img = new Image();
-            img.src =  this.facsData.textMetadata.imageBaseUrl + s.imageUrl;
-            arrImages.push(img);
         }
     }
 
