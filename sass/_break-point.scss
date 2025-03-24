@@ -1,0 +1,189 @@
+
+
+@mixin site-link {
+	@content;
+	color: var(--highlight);
+	text-decoration: underline;
+	text-decoration-color: var(--underline);
+	transition: all .3s ease-in-out;
+}
+
+@mixin site-link-active {
+	color: var(--link-active);
+	text-decoration-color: var(--underline-active);
+}
+
+@mixin bp1440 {
+	@media only screen and (min-width: 1440px) {
+		@content;
+	}
+}
+
+@mixin bp1366 {
+    @media only screen and (min-width: 1366px) {
+      @content;
+    }	
+  }
+@mixin bp1280 {
+  @media only screen and (min-width: 1280px) {
+    @content;
+  }	
+}
+
+@mixin bp1024 {
+  @media only screen and (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin bp1100 {
+  @media only screen and (min-width: 1100px) {
+    @content;
+  }
+}
+@mixin bp1140 {
+  @media only screen and (min-width: 1140px) {
+    @content;
+  }
+}
+@mixin bp1000 {
+	@media only screen and (min-width: 1000px) {
+		@content;
+  }
+}
+@mixin bp960 {
+  @media only screen and (min-width: 960px) {
+    @content;
+  }
+}
+@mixin bp900 {
+  @media only screen and (min-width: 900px) {
+    @content;
+  }
+}
+@mixin bp768 {
+ @media only screen and (min-width: 768px) {
+    @content;	
+  }
+}
+@mixin bp600 {
+  @media only screen and (min-width: 600px) {
+    @content;
+  }
+}
+@mixin bp550 {
+  @media only screen and (min-width: 550px) {
+    @content;
+  }
+}
+@mixin bp500 {
+  @media only screen and (min-width: 500px) {
+    @content;
+  }
+}
+@mixin bp480 {
+	@media only screen and (min-width: 480px) {
+		@content;
+	}
+}
+@mixin bp400 {
+	@media only screen and (min-width: 400px) {
+		@content;
+	}
+}
+@mixin bp375 {
+	@media only screen and (min-width: 375px) {
+		@content;
+	}
+}
+@mixin bp350 {
+@media only screen and (min-width: 350px) {
+		@content;
+	}	
+}
+@mixin bp320 {
+	@media only screen and (min-width: 320px) {
+		@content;
+	}
+}
+
+@mixin bp600max {
+  @media only screen and (max-width: 600px) {
+    @content;
+  }
+}
+
+@mixin bp768x600 {
+	@media only screen and (min-height: 500px) and (min-width: 768px) {
+		@content;
+	}
+}
+
+@mixin bp768x700 {
+	@media only screen and (min-height: 700px) and (min-width: 768px) {
+		@content;
+	}
+}
+
+@mixin bp900x700 {
+	@media only screen and (min-height: 700px) and (min-width: 900px) {
+		@content;
+	}
+}
+
+@mixin bp960x600 {
+	@media only screen and (min-height: 700px) and (min-width: 960px) {
+		@content;
+	}
+}
+@mixin bp1280x800 {
+	@media only screen and (min-height: 800px) and (min-width: 1200px) {
+		@content;
+	}
+}
+@mixin bpmobile{
+	@media only screen and (min-width: 300px) {
+		@content;
+	}
+}
+
+@mixin bpshallow {
+	@media only screen and (min-height: 650px) and (min-width: 700px) {
+		@content;
+	}
+}
+
+@mixin bpshallow {
+	@media only screen and (min-height: 650px) and (min-width: 700px) {
+		@content;
+	}
+}
+
+@mixin bpsupershallow {
+	@media only screen and (min-height: 400px) and (min-width: 700px) {
+		@content;
+	}
+}
+
+
+
+@mixin phone-landscape {
+	@media screen and (orientation:landscape) and (max-width: 767px) {
+		@content
+	}
+}
+@mixin ipad-landscape {
+	@media only screen and (max-height: 768px) and (orientation: landscape) {
+		@content
+	}
+}
+
+@mixin hover-supported {    
+
+  @media(any-hover: hover) {
+            @content;
+        }
+    }
+
+
+
