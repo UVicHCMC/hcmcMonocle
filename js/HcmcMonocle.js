@@ -200,6 +200,21 @@ class HcmcMonocle{
             }
         }
     }
+    /** 
+     *  @function HcmcMonocle~showFacs 
+     *  @description This switches to displaying a specific facsimile
+     *               based on its id.
+     *  @param {string} facsId The identifier of the facsimile.
+    */
+   showFacs(facsId){
+        if (this.facsMap.has(facsId)){
+            let facsIndex = this.facsMap.get(facsId);
+            //DO STUFF HERE...
+
+            this.currFacs = facsIndex;
+        }
+   }
+
 
     /** 
      *  @function HcmcMonocle~showSurfaceByUrl 
@@ -255,9 +270,12 @@ class HcmcMonocle{
      *  @param {integer} changeBy An integer expected to be 1 or -1.
     */
     switchSurface(changeBy){
+        if (this.currFacs < 0){
+            return;
+        }
         let newIdx = this.currSurface + changeBy;
         //We may have to wrap around.
-        if (newIdx >= this.facsData.surfaces.length){
+        if (newIdx >= this.facsData.facsimiles.surfaces.length){
             newIdx = 0;
         }
         if (newIdx < 0){
@@ -269,8 +287,8 @@ class HcmcMonocle{
     /** 
      *  @function HcmcMonocle~getSurfaceIndex 
      *  @description This retrieves the index of a surface in the 
-     *               array of surfaces (this.facsData.surfaces), based 
-     *               on its imageUrl.
+     *               array of surfaces for a specific facsimile, based 
+     *               on the imageUrl of the surface.
      *  @param {string} targImageUrl The image URL to search for.
      *  @return {integer} The index if found, or -1 if not. 
     */
@@ -279,12 +297,17 @@ class HcmcMonocle{
         function isMatch(surface){
             return surface.imageUrl === targImageUrl;
         }
-        let idx = this.facsData.surfaces.findIndex(isMatch);
-        if (idx > -1){
-            return idx;
+        if (this.currFacs < 0){
+            return -1;
         }
         else{
-            return -1;
+            let idx = this.facsData.facsimiles[this.currFacs].surfaces.findIndex(isMatch);
+            if (idx > -1){
+                return idx;
+            }
+            else{
+                return -1;
+            }
         }
     }
 
