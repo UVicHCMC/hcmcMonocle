@@ -1,0 +1,190 @@
+//Fonts that are available everywhere
+:root {
+	--primary-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--primary-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+	--primary-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+//Typography inside class: flow
+.flow {
+	//line height
+	--content-lh: 1.6;
+	//letter spacing
+	--content-ls: .022em;
+	
+	//Link colors, uses site-wide highlight and text color as defaul;
+	--link: var(--highlight);
+	--link-inactive: var(--highlight);
+	--link-active: var(--highlight-active);
+	--underline-active: var(--highlight-active);
+	
+	//Font sizes, 16px body font, 1.2 scale factor
+
+	--fs-100: .578rem;
+	--fs-200: .694rem;
+	--fs-300: .833rem;
+	--fs-400: 1rem;
+	--fs-500: 1.2rem;
+	--fs-600: 1.44rem;
+	--fs-700: 1.78rem;
+	--fs-800: 2.074rem;
+	--fs-900: 2.488rem;
+	--fs-1000: 2.986rem;
+
+	//Figures
+	--figure-bg-color: #fafafa;
+	--figure-border-color: #e6e6e6;
+	--figcaption-color: var(--text-color);
+	--figcaption-font-size: var(--fs-300);
+	 
+}
+
+//The following typography is intended for normal content, which I call flow located in the main tag class of "flow". It is not used for special cases like tables, galleries, navigation items etc.
+
+.flow {
+	
+	h1, h2, h3, h4, h5, h6 {
+		font-family: var(--primary-sans);
+		color: var(--text-color);
+	}
+	
+	h1 {
+		margin-top: 1.5rem;
+		font-weight: 700;
+	}
+	
+	h1 + * {
+		margin-top: 1.5rem;
+	}
+	
+	h2 + * {
+		margin-top: .5rem;
+	}
+	
+	h3 + * {
+		margin-top: .25rem;
+	}
+	
+	h4 + *, h5 + *, h6+ * {
+		margin-top: 0;
+	}
+	
+	
+	h2 {
+		font-weight: 600;
+	}
+	
+	h3 {
+		font-weight: 600;
+	}
+	
+	h4, h5, h6 {
+		font-weight: 500;
+	}
+
+	p {
+		font-family: var(--primary-sans);
+		font-weight: 400;
+		font-size: var(--fs-400);
+		line-height: var(--content-lh);
+		color: var(--text-color);
+	}
+	
+	a, a:visited {
+		color: var(--link-inactive);
+		text-decoration: underline;
+		text-decoration-color: var(--underline);
+		transition: all .3s ease-in-out;
+	}
+	
+	a:hover, a:focus {
+		color: var(--link-active);
+		text-decoration-color: var(--underline-active);
+	}
+	
+	p + *,
+	ul + *,
+	ol + *,
+	blockquote + *,
+	figure + * {
+		margin-top: 1.5rem;
+	}
+	
+	blockquote {
+		color: var(--text-color);
+		font-family: var(--primary-sans);
+	}
+	
+	ul, 
+	ol {
+		font-family: var(--primary-sans);
+		font-size: var(--fs-400);
+		font-weight: 400;
+		color: var(--text-color);
+	}
+	
+	ul {
+		list-style: disc outside;
+		margin-left: 1.25rem;
+	}
+	
+	li > ul {
+		margin-left: 1.5rem;
+		margin-top: .25rem;
+		margin-bottom: .25rem;
+	}
+	
+	ol {
+		list-style: decimal outside;
+		margin-left: 1.5rem;
+	}
+	
+	li > ol {
+		margin-left: 1.75rem;
+		margin-top: .25rem;
+		margin-bottom: .25rem;
+	}
+		
+	pre {
+		max-width: 100%;
+		overflow-x: scroll;
+		background-color: #000;
+		padding: .5rem;
+	}
+	
+	code {
+		font-family: var(--primary-mono);
+		font-size: var(--fs-300);
+		color: #ffffff;
+		
+		
+	}
+	
+	figure {
+		padding: 1rem;
+		background-color: var(--figure-bg-color);
+		border: 1px solid var(--figure-border-color);
+		width: auto;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+	
+	figcaption {
+		color: var(--text-color);
+		font-family: var(--primary-sans);
+		text-align: left;
+		font-size: var(--figcaption-font-size);
+	}
+	
+	.note {
+		color: var(--gray-450);
+		font-size: var(--fs-300);
+		font-weight: 300;
+		font-family: var(--primary-sans);	
+	}
+	
+	
+
+
+}

@@ -1,0 +1,98 @@
+// Reset updated for 2019
+
+//calculates the dimensions of elements including padding and border everywhere
+html {
+    box-sizing: border-box;
+  }*,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+  
+  /* Set core body defaults */
+  body {
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    line-height: 1.6;
+  }
+  
+  
+  
+  //Remove browser styles from forms
+  
+  input:focus,
+  select:focus,
+  textarea:focus,
+  button:focus {
+      outline: none;
+  }
+  
+  //Removes 300ms delay on touch devices
+  a,
+  area,
+  button,
+  [role="button"],
+  input,
+  label,
+  select,
+  summary,
+  textarea {
+    touch-action: manipulation;
+  }
+  
+  /* Remove default padding */
+  ul,
+  ol {
+   margin-block: 0;
+   padding-inline: 0;
+   padding: 0;
+   margin: 0;
+  }
+  /* Remove default margin */
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  li,
+  figure,
+  figcaption,
+  blockquote,
+  dl,
+  dd {
+    margin: 0;
+  }
+	
+  
+  /* Make images easier to work with */
+  img {
+   max-width: 100%;
+   height: auto;
+   vertical-align: middle;
+   font-style: italic;
+   shape-margin: .75rem;
+  }
+  
+  
+  /* Inherit fonts for inputs and buttons */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+  }
+  
+  /* Remove all animations and transitions for people that prefer not to see them */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  

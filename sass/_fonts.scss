@@ -1,0 +1,57 @@
+//path to the fonts location 
+$fontPath : "../fonts/";
+
+
+@font-face {
+	font-family: 'Inter';
+	font-weight: 100 900;
+	font-style: normal;
+	src: url("#{$fontPath}Inter-variable.woff2") format("woff2-variations");
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Inter';
+	font-weight: 100 900;
+	font-style: italic;
+	src: url("#{$fontPath}Inter-variable-italic.woff2") format("woff2-variations");
+	font-display: swap;
+}
+
+/*some typographical notes
+
+For Inter
+
+4.165em (66.64px)
+3.903em (62.46px)
+3.658em (58.53px)
+3.429em (54.86px)
+3.213em (51.41px)
+3.012em (48.19px)
+2.822em (45.16px)
+2.645em (42.32px)
+2.479em (39.67px)
+2.323em (37.18px)
+2.178em (34.84px)
+2.041em (32.65px)
+1.913em (30.60px)
+1.793em (28.68px)
+1.68em (26.88px)
+1.575em (25.19px)
+1.476em (23.61px)
+1.383em (22.13px)
+1.296em (20.74px)
+1.215em (19.44px)
+1.138em (18.22px)
+1.067em (17.07px)
+1em (16.00px)
+0.937em (15.00px)
+0.878em (14.05px)
+0.823em (13.17px)
+0.772em (12.34px)
+0.723em (11.57px)
+0.678em (10.84px) 
+*/
+
+
+
