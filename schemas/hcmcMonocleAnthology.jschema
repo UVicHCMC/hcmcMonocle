@@ -87,7 +87,7 @@
                                 "type": "string"
                             },
                             "titlePageIndex": {
-                                "description": "The index of the surface which should serve as the representative page for this facsimile when viewing the anthology thumbnails. If empty or less than zero, the first surface will be used.",
+                                "description": "The zero-based index of the surface which should serve as the representative page for this facsimile when viewing the anthology thumbnails. If empty or less than zero, the first surface will be used.",
                                 "type": "integer"
                             }
                         }
