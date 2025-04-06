@@ -73,14 +73,14 @@ class HcmcMonocle{
         this.isPanning = false;     //For tracking whether we're panning with the pointer or not.
 
         //These are the ids of elements on the page we need to connect to.
-        this.requiredIds = new Array('currTitle', 'currMetadata', 'currMetadataMain', 'currMetadataToc',
+        this.requiredIds = new Array('currTitle', 'metadataAnthology', 'metadataFacsimile', 'currMetadataToc',
                                      'oneSurface', 'oneSurfaceLinks', 'oneSurfaceFigure', 
-                                     'oneSurfaceImage', 'oneSurfaceMetadata', 'btnPanUp', 'btnPanRight', 
+                                     'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
                                      'btnPanDown', 'btnPanLeft', 'btnPlus', 'btnMinus', 
                                      'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 
                                      'btnRight', 'collection', 'thumbnails');
                                     
-        //Find each of thest things and connect it to a property.                             
+        //Find each of these things and connect it to a property.                             
         for (let id of this.requiredIds){
             this[id] = document.getElementById(id);
             if (!this[id]){console.error(`ERROR: Item with id ${id} not found.`);}
@@ -141,10 +141,10 @@ class HcmcMonocle{
         }
 
         //Figure out if there's a facsimile to default to showing.
-        this.targFacs = searchParams.get('facs').trim() ?? null;
+        this.targFacs = (searchParams.has('facs'))? searchParams.get('facs').trim() : null;
 
         //Figure out the target image to show first, if there is one.
-        this.targSurface = searchParams.get('surface').trim() ?? null;
+        this.targSurface = (searchParams.has('surface')) ? searchParams.get('surface').trim() : null;
 
         //We'll track what's actually showing with these variables.
         this.currFacs = -1;
@@ -162,7 +162,7 @@ class HcmcMonocle{
         const json = await response.json();
         this.data = json;
         //Populate our lookup maps for faster access to facsimiles.
-        for (let f in data.facsimiles){
+        for (let f in this.data.facsimiles){
             this.facsMap.set(f.facsId, f);
         }
         this.loaded = true;
@@ -200,6 +200,26 @@ class HcmcMonocle{
             }
         }
     }
+    /** 
+     * @function HcmcMonocle~populateAnthologyMetadata 
+     * @description This generates the content for the anthology
+     *              metadata panel, which should be unchanged for 
+     *              the entire session with the same anthology.
+    */
+    populateAnthologyMetadata(){
+        //TODO
+    }
+
+    /** 
+     * @function HcmcMonocle~showAnthology 
+     * @description This generates all the thumbnails linking to 
+     *              the facsimiles in the current anthology and 
+     *              shows that panel.
+    */
+    showAnthology(){
+            //TODO
+        }
+
     /** 
      *  @function HcmcMonocle~showFacs 
      *  @description This switches to displaying a specific facsimile
