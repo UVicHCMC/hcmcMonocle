@@ -160,9 +160,9 @@ class HcmcMonocle{
         const request = new Request(this.jsonUri);
         const response = await fetch(request, this.fetchHeaders);
         const json = await response.json();
-        this.data = json;
+        this.data = await json;
         //Populate our lookup maps for faster access to facsimiles.
-        for (let f in this.data.facsimiles){
+        for (let f of this.data.facsimiles){
             this.facsMap.set(f.facsId, f);
         }
         this.loaded = true;
@@ -229,6 +229,7 @@ class HcmcMonocle{
    showFacs(facsId){
         if (this.facsMap.has(facsId)){
             let facsIndex = this.facsMap.get(facsId);
+            
             //DO STUFF HERE...
 
             this.currFacs = facsIndex;
@@ -314,7 +315,7 @@ class HcmcMonocle{
     */
     getSurfaceIndex(targImageUrl){
         //Nested callback function.
-        function isMatch(surface){
+        let isMatch = function(surface){
             return surface.imageUrl === targImageUrl;
         }
         if (this.currFacs < 0){
