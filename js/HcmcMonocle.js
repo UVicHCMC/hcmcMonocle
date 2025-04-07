@@ -73,8 +73,9 @@ class HcmcMonocle{
         this.isPanning = false;     //For tracking whether we're panning with the pointer or not.
 
         //These are the ids of elements on the page we need to connect to.
-        this.requiredIds = new Array('currTitle', 'metadataAnthology', 'metadataFacsimile', 'currMetadataToc',
-                                     'oneSurface', 'oneSurfaceLinks', 'oneSurfaceFigure', 
+        this.requiredIds = new Array('currTitle', 'metadata', 'metadataAnthology', 
+                                     'metadataFacsimile', 'currMetadataToc',
+                                     'oneSurface', 'oneSurfaceLinks', 'oneSurfaceFigure', 'collection',
                                      'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
                                      'btnPanDown', 'btnPanLeft', 'btnPlus', 'btnMinus', 
                                      'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 
@@ -146,9 +147,9 @@ class HcmcMonocle{
         //Figure out the target image to show first, if there is one.
         this.targSurface = (searchParams.has('surface')) ? searchParams.get('surface').trim() : null;
 
-        //We'll track what's actually showing with these variables.
-        this.currFacs = -1;
-        this.currSurface = -1;
+        //We'll track what's actually showing with these integer variables.
+        this.currFacs = null; //Will be a pointer to the object
+        this.currSurfaceIdx = -1; //Will be the offset in the array, since we move through these in sequence.
       }
 
     /** 
@@ -207,7 +208,11 @@ class HcmcMonocle{
      *              the entire session with the same anthology.
     */
     populateAnthologyMetadata(){
-        //TODO
+        this.currTitle.innerHTML = this.data.anthologyTitleMain;
+        for (const m in this.data.anthologyMetadata){
+            console.dir(m);
+            //TODO
+        }
     }
 
     /** 
@@ -228,11 +233,14 @@ class HcmcMonocle{
     */
    showFacs(facsId){
         if (this.facsMap.has(facsId)){
-            let facsIndex = this.facsMap.get(facsId);
+            let facs = this.facsMap.get(facsId);
             
             //DO STUFF HERE...
 
-            this.currFacs = facsIndex;
+            this.currFacs = facs;
+        }
+        else{
+            console.log('Unable to find facsimile with id ' + facsId);
         }
    }
 
@@ -261,23 +269,22 @@ class HcmcMonocle{
      *  @param {string} idx The index of the image.
     */
     showSurfaceByIndex(idx){
-        if (idx > -1){
+        if ((idx > -1) && (this.currFacs !== null)){
             //Logic for displaying a surface.
             this.currSurface = idx;
-            this.oneSurfaceImage.setAttribute('src', this.facsData.textMetadata.imageBaseUrl + this.facsData.surfaces[idx].imageUrl);
-            this.oneSurfaceMetadata.innerHTML = '';
-            for (let l of this.facsData.surfaces[idx].links){
+            this.oneSurfaceImage.setAttribute('src', this.currFacs.textMetadata.imageBaseUrl + this.currFacs.surfaces[idx].imageUrl);
+            this.oneSurfaceLinks.innerHTML = '';
+            for (let l of this.currFacs.surfaces[idx].links){
                 let a = document.createElement('a');
                 let t = document.createTextNode(l.caption);
                 a.setAttribute('href', l.link);
                 a.appendChild(t);
-                this.oneSurfaceMetadata.appendChild(a);
+                this.oneSurfaceLinks.appendChild(a);
             }
             this.collection.style.display = 'none';
-            this.listing.style.display = 'none';
+            this.metadata.style.display = 'none';
             this.oneSurface.style.display = 'block';
             this.panelShowing = HcmcMonocle.PANELS.ONESURFACE;
-            this.oneSurfaceMetadata.style.display = 'block';
         }
         else{
             console.log('The surface image with this index was not found: ' + idx);
@@ -291,16 +298,16 @@ class HcmcMonocle{
      *  @param {integer} changeBy An integer expected to be 1 or -1.
     */
     switchSurface(changeBy){
-        if (this.currFacs < 0){
+        if (this.currFacs === null){
             return;
         }
         let newIdx = this.currSurface + changeBy;
         //We may have to wrap around.
-        if (newIdx >= this.facsData.facsimiles.surfaces.length){
+        if (newIdx >= this.currFacs.surfaces.length){
             newIdx = 0;
         }
         if (newIdx < 0){
-            newIdx = this.facsData.surfaces.length - 1;
+            newIdx = this.currFacs.surfaces.length - 1;
         }
         this.showSurfaceByIndex(newIdx);
     }
@@ -318,11 +325,11 @@ class HcmcMonocle{
         let isMatch = function(surface){
             return surface.imageUrl === targImageUrl;
         }
-        if (this.currFacs < 0){
+        if (this.currFacs === null){
             return -1;
         }
         else{
-            let idx = this.facsData.facsimiles[this.currFacs].surfaces.findIndex(isMatch);
+            let idx = this.currFacs.surfaces.findIndex(isMatch);
             if (idx > -1){
                 return idx;
             }
@@ -344,10 +351,10 @@ class HcmcMonocle{
         // first. Then hide the single-surface page and show the collection. 
         if (this.thumbnails.getElementsByTagName('figure').length < 1){
             console.log('Creating thumbnail display...');
-            for (let s of this.facsData.surfaces){
+            for (let s of this.currFacs.surfaces){
                 let f = document.createElement('figure');
                 let i = document.createElement('img');
-                i.setAttribute('src', this.facsData.textMetadata.thumbnailBaseUrl + s.thumbnailUrl);
+                i.setAttribute('src', this.currFacs.textMetadata.thumbnailBaseUrl + s.thumbnailUrl);
                 i.addEventListener('click', function(){this.showSurfaceByUrl(s.imageUrl)}.bind(this));
                 f.appendChild(i);
                 this.thumbnails.appendChild(f);
@@ -398,7 +405,7 @@ class HcmcMonocle{
     showMetadata(l){
         //TODO: Logic for displaying metadata.
         console.log('Showing project metadata...');
-        this.facsTitle.innerHTML = this.facsData.facsTitleMain;
+        this.facsTitle.innerHTML = this.currFacs.facsTitleMain;
         let rows = new Array();
         for (let md of ['authority', 'availability', 'source']){
             let caption = this.propNameToCaption(md);
@@ -406,7 +413,7 @@ class HcmcMonocle{
             let td1 = document.createElement('td');
             td1.appendChild(document.createTextNode(caption));
             let td2 = document.createElement('td');
-            td2.appendChild(document.createTextNode(this.facsData.textMetadata[md]));
+            td2.appendChild(document.createTextNode(this.currFacs.textMetadata[md]));
             tr.appendChild(td1);
             tr.appendChild(td2);
             rows.push(tr);
