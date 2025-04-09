@@ -32,8 +32,8 @@ class HcmcMonocle{
      */
     static PANELS = {
         NONE:      -1,
-        LISTING:    0,
-        COLLECTION: 1,
+        ANTHOLOGY:    0,
+        FACSIMILE: 1,
         ONESURFACE: 2,
         METADATA:   3
     };
@@ -75,11 +75,12 @@ class HcmcMonocle{
         //These are the ids of elements on the page we need to connect to.
         this.requiredIds = new Array('currTitle', 'metadata', 'metadataAnthology', 
                                      'metadataFacsimile', 'currMetadataToc',
-                                     'oneSurface', 'oneSurfaceLinks', 'oneSurfaceFigure', 'collection',
+                                     'oneSurface', 'oneSurfaceLinks', 'oneSurfaceFigure',
                                      'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
                                      'btnPanDown', 'btnPanLeft', 'btnPlus', 'btnMinus', 
                                      'btnRotate', 'btnDarkLight', 'btnReset', 'btnLeft', 
-                                     'btnRight', 'collection', 'thumbnails');
+                                     'btnRight', 'collection', 'thumbnailsAnthology',
+                                     'thumbnailsFacsimile');
                                     
         //Find each of these things and connect it to a property.                             
         for (let id of this.requiredIds){
@@ -147,7 +148,7 @@ class HcmcMonocle{
         //Figure out the target image to show first, if there is one.
         this.targSurface = (searchParams.has('surface')) ? searchParams.get('surface').trim() : null;
 
-        //We'll track what's actually showing with these integer variables.
+        //We'll track what's actually showing with these variables.
         this.currFacs = null; //Will be a pointer to the object
         this.currSurfaceIdx = -1; //Will be the offset in the array, since we move through these in sequence.
       }
@@ -197,7 +198,7 @@ class HcmcMonocle{
         //collection.
         else{
             if (this.data.anthologyTitleMain != null){
-                this.showAnthology();
+                this.showAnthologyThumbnails();
             }
         }
     }
@@ -214,16 +215,6 @@ class HcmcMonocle{
             //TODO
         }
     }
-
-    /** 
-     * @function HcmcMonocle~showAnthology 
-     * @description This generates all the thumbnails linking to 
-     *              the facsimiles in the current anthology and 
-     *              shows that panel.
-    */
-    showAnthology(){
-            //TODO
-        }
 
     /** 
      *  @function HcmcMonocle~showFacs 
@@ -340,16 +331,16 @@ class HcmcMonocle{
     }
 
     /** 
-     *  @function HcmcMonocle~showCollection 
+     *  @function HcmcMonocle~showFacsimileThumbnails 
      *  @description This displays the entire collection of thumbnails
      *               as links to specific surfaces.
     */
-    showCollection(l){
+    showFacsimileThumbnails(l){
         //TODO: Logic for displaying all the thumbnails.
-        console.log('Showing thumbnail page...');
+        console.log('Showing thumbnail page for facsimiles...');
         //Check whether it's already been constructed. If not, construct it 
         // first. Then hide the single-surface page and show the collection. 
-        if (this.thumbnails.getElementsByTagName('figure').length < 1){
+        if (this.thumbnailsFacsimile.getElementsByTagName('figure').length < 1){
             console.log('Creating thumbnail display...');
             for (let s of this.currFacs.surfaces){
                 let f = document.createElement('figure');
@@ -357,45 +348,51 @@ class HcmcMonocle{
                 i.setAttribute('src', this.currFacs.textMetadata.thumbnailBaseUrl + s.thumbnailUrl);
                 i.addEventListener('click', function(){this.showSurfaceByUrl(s.imageUrl)}.bind(this));
                 f.appendChild(i);
-                this.thumbnails.appendChild(f);
+                this.thumbnailsFacsimile.appendChild(f);
             }
         }
         this.oneSurface.style.display = 'none';
         this.oneSurfaceMetadata.style.display = 'none';
-        this.listing.style.display = 'none';
+        this.thumbnailsAnthology.style.display='none';
         this.collection.style.display = 'block';
+        this.thumbnailsFacsimile.style.display = 'block';
         this.panelShowing = HcmcMonocle.PANELS.COLLECTION;
     }
 
     /** 
-     *  @function HcmcMonocle~showListing 
-     *  @description This displays the entire listing of facsimiles
-     *               as links to specific facsimiles.
+     *  @function HcmcMonocle~showAnthologyThumbnails 
+     *  @description This displays the entire listing of facsimiles with 
+     *               one thumbnail for each, as links to specific facsimiles.
+     *               If the listing has not yet been created, it creates it.
     */
-    showListing(l){
+    showAnthologyThumbnails(l){
         //TODO: Logic for displaying all the items.
-        console.log('Showing listing page...');
+        console.log('Showing anthology listing page...');
         //Check whether it's already been constructed. If not, construct it 
         // first. Then hide the single-surface page and the collection and 
         // show the listing. 
-        if (this.listing.getElementsByTagName('ul').length < 1){
-            console.log('Creating listing display...');
-            let ul = document.createElement('ul');
-            for (let f of this.listingData.facsimiles){
-                let li = document.createElement('li');
-                let a = document.createElement('a');
-                a.setAttribute('href', this.listingData.facsBaseUrl || f.facsUrl);
-                a.appendChild(document.createTextNode(f.facsTitle));
-                li.appendChild(a);
-                ul.appendChild(li);
+        if (this.thumbnailsAnthology.getElementsByTagName('figure').length < 1){
+            for (const f of this.data.facsimiles){
+                console.log('Processing ' + f.facsId);
+                let fig = document.createElement('figure');
+                let img = document.createElement('img');
+                let cap = document.createElement('figcaption');
+                cap.appendChild(document.createTextNode(f.facsTitleMain));
+                let idx = f.textMetadata.titlePageIndex ? f.textMetadata.titlePageIndex : 0;
+                img.setAttribute('src', f.textMetadata.thumbnailBaseUrl + f.surfaces[idx].thumbnailUrl);
+                img.setAttribute('alt', f.facsTitleFull ? f.facsTitleFull : f.facsTitleMain);
+                fig.appendChild(img);
+                fig.appendChild(cap);
+                this.thumbnailsAnthology.appendChild(fig);
+                fig.addEventListener('click', function(){this.showFacs(f.facsId)}.bind(this));
             }
-            this.listing.appendChild(ul);
         }
         this.oneSurface.style.display = 'none';
         this.oneSurfaceMetadata.style.display = 'none';
-        this.listing.style.display = 'block';
-        this.collection.style.display = 'none';
-        this.panelShowing = HcmcMonocle.PANELS.LISTING;
+        this.thumbnailsFacsimile.style.display='none';
+        this.collection.style.display = 'block';
+        this.thumbnailsAnthology.style.display='block';
+        this.panelShowing = HcmcMonocle.PANELS.ANTHOLOGY;
     }
 
     /** 
