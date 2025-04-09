@@ -20,6 +20,9 @@ div#thumbnailsAnthology, div#thumbnailsFacsimile{
     flex-direction: row; 
     flex-wrap: wrap;
     gap: 1rem;
+    figure{
+        max-width: 7rem;
+    }
     img{
         width: 6rem;
         cursor: pointer;
