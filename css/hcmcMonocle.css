@@ -29,6 +29,44 @@ div#thumbnailsAnthology, div#thumbnailsFacsimile{
     }
 }
 
+/* The metadata slideout panel. */
+div#metadataContainer{
+    display: flex;
+    flex-direction: column;
+    max-width: 30rem;
+    span#metadataTabs{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        /* Hide some buttons by default. */
+        button#menuShow{
+            display: inline;
+        }
+        button#menuHide, button#menuMetadataShow, button#menuTocShow{
+            display: none;
+        }
+    }
+    div#pnlMetadata{
+        display: flex;
+        flex-direction: column;
+        display: none;
+    }
+    div#pnlFacsToc{
+        display: none;
+    }
+    &.showing{
+        span#metadataTabs{
+            /* Hide some buttons by default. */
+            button#menuShow{
+                display: none;
+            }
+            button#menuHide, button#menuMetadataShow, button#menuTocShow{
+                display: inline;
+            }
+        }
+    }
+}
+
 div#facsMetadata table{
     width: 80%;
     margin-left: 10%;

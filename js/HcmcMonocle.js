@@ -73,8 +73,9 @@ class HcmcMonocle{
         this.isPanning = false;     //For tracking whether we're panning with the pointer or not.
 
         //These are the ids of elements on the page we need to connect to.
-        this.requiredIds = new Array('currTitle', 'metadata', 'metadataAnthology', 
-                                     'metadataFacsimile', 'currMetadataToc',
+        this.requiredIds = new Array('currTitle', 'menuShow', 'menuHide', 'menuMetadataShow',
+                                     'menuTocShow', 'metadataContainer', 'metadataAnthology', 
+                                     'metadataFacsimile', 'pnlFacsToc',
                                      'oneSurface', 'oneSurfaceLinks', 'oneSurfaceFigure',
                                      'oneSurfaceImage', 'btnPanUp', 'btnPanRight', 
                                      'btnPanDown', 'btnPanLeft', 'btnPlus', 'btnMinus', 
@@ -99,6 +100,8 @@ class HcmcMonocle{
         this.btnPanRight.addEventListener('click', function(){this.panImage(1, 0)}.bind(this));
         this.btnPanDown.addEventListener('click', function(){this.panImage(0, 1)}.bind(this));
         this.btnPanLeft.addEventListener('click', function(){this.panImage(-1, 0)}.bind(this));
+        this.menuShow.addEventListener('click', function(){this.showHideMetadata()}.bind(this));
+        this.menuHide.addEventListener('click', function(){this.showHideMetadata()}.bind(this));
 
         //Keystroke shortcuts.
         window.addEventListener('keydown', function(e){ 
@@ -217,12 +220,20 @@ class HcmcMonocle{
     }
 
     /** 
+     *  @function HcmcMonocle~showHideMetadata 
+     *  @description This toggles the display of the metadata panel.
+    */
+    showHideMetadata(){
+        this.metadataContainer.classList.toggle('showing');
+    }
+
+    /** 
      *  @function HcmcMonocle~showFacs 
      *  @description This switches to displaying a specific facsimile
      *               based on its id.
      *  @param {string} facsId The identifier of the facsimile.
     */
-   showFacs(facsId){
+    showFacs(facsId){
         if (this.facsMap.has(facsId)){
             let facs = this.facsMap.get(facsId);
             this.currFacs = facs;

@@ -41,23 +41,36 @@
         
         <!-- The main metadata container, which will presumably have panels
              and tabs for switching between them. -->
-        <div id="metadata">
+        <div id="metadataContainer">
             <!-- Metadata for the current thing (facs, anthology
                  or surface) will be displayed here. -->
-            <!-- This is the metadata for the anthology. -->
-            <div id="metadataAnthology">
+            <!-- This hides and shows things in this panel. -->
+            <span id="metadataTabs">
+                <button id="menuShow">Menu ≡</button>
+                <button id="menuHide">Menu ✕</button>
+                <button id="menuMetadataShow">Metadata</button>
+                <button id="menuTocShow">Index</button>
+            </span>
 
+            <div id="pnlMetadata">
+                <!-- This is the metadata for the anthology. -->
+                <h3>Anthology metadata</h3>
+                <div id="metadataAnthology">
+
+                </div>
+                <!-- This is the panel that will display the metadata for
+                    a selected facsimile from the anthology. -->
+                <h3>Facsimile metadata</h3>
+                <div id="metadataFacsimile">
+                    
+                </div>
             </div>
-            <!-- This is the panel that will display the metadata for
-                 a selected facsimile from the anthology. -->
-            <div id="metadataFacsimile">
-                
-            </div>
+            
             <!-- This is going to be a table of contents for a 
                  facsimile, showing whenever the current display 
                  shows the thumbnails of that facsimile or a 
                  single surface from it. -->
-            <div id="currMetadataToc">
+            <div id="pnlFacsToc">
 
             </div>
         </div>
