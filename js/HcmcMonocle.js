@@ -225,10 +225,9 @@ class HcmcMonocle{
    showFacs(facsId){
         if (this.facsMap.has(facsId)){
             let facs = this.facsMap.get(facsId);
-            
-            //DO STUFF HERE...
-
             this.currFacs = facs;
+            this.currTitle.innerHTML = facs.facsTitleMain;
+            this.showFacsimileThumbnails();
         }
         else{
             console.log('Unable to find facsimile with id ' + facsId);
@@ -352,10 +351,10 @@ class HcmcMonocle{
             }
         }
         this.oneSurface.style.display = 'none';
-        this.oneSurfaceMetadata.style.display = 'none';
+        this.oneSurfaceLinks.style.display = 'none';
         this.thumbnailsAnthology.style.display='none';
         this.collection.style.display = 'block';
-        this.thumbnailsFacsimile.style.display = 'block';
+        this.thumbnailsFacsimile.style.display = 'flex';
         this.panelShowing = HcmcMonocle.PANELS.COLLECTION;
     }
 
@@ -388,10 +387,10 @@ class HcmcMonocle{
             }
         }
         this.oneSurface.style.display = 'none';
-        this.oneSurfaceMetadata.style.display = 'none';
+        this.oneSurfaceLinks.style.display = 'none';
         this.thumbnailsFacsimile.style.display='none';
         this.collection.style.display = 'block';
-        this.thumbnailsAnthology.style.display='block';
+        this.thumbnailsAnthology.style.display='flex';
         this.panelShowing = HcmcMonocle.PANELS.ANTHOLOGY;
     }
 
