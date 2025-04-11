@@ -406,10 +406,10 @@ class HcmcMonocle{
     }
 
     /** 
-     *  @function HcmcMonocle~showMetadata 
+     *  @function HcmcMonocle~showFacsMetadata 
      *  @description This displays the facsimile-level metadata
     */
-    showMetadata(l){
+    showFacsMetadata(l){
         //TODO: Logic for displaying metadata.
         console.log('Showing project metadata...');
         this.facsTitle.innerHTML = this.currFacs.facsTitleMain;
