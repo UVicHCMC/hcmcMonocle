@@ -183,7 +183,7 @@ class HcmcMonocle{
     */
     display(){
         //We always include the anthology metadata.
-        this.populateAnthologyMetadata();
+        this.writeAnthologyMetadata();
 
         //We populate the view with the selected facsimile first,
         //if there is one. Note that if there is a target surface 
@@ -206,12 +206,14 @@ class HcmcMonocle{
         }
     }
     /** 
-     * @function HcmcMonocle~populateAnthologyMetadata 
+     * @function HcmcMonocle~writeAnthologyMetadata 
      * @description This generates the content for the anthology
      *              metadata panel, which should be unchanged for 
-     *              the entire session with the same anthology.
+     *              the entire session with the same anthology. It
+     *              also sets the main page title to the anthology
+     *              title.
     */
-    populateAnthologyMetadata(){
+    writeAnthologyMetadata(){
         this.currTitle.innerHTML = this.data.anthologyTitleMain;
         for (const m in this.data.anthologyMetadata){
             console.dir(m);
@@ -406,10 +408,13 @@ class HcmcMonocle{
     }
 
     /** 
-     *  @function HcmcMonocle~showFacsMetadata 
-     *  @description This displays the facsimile-level metadata
+     *  @function HcmcMonocle~writeFacsMetadata 
+     *  @description This renders the facsimile-level metadata for the current
+     *               facsimile into the appropriate locations, with the title 
+     *               going into the facsTitle component on the page, and the 
+     *               rest going into the facsimile metadata tab.
     */
-    showFacsMetadata(l){
+    writeFacsMetadata(){
         //TODO: Logic for displaying metadata.
         console.log('Showing project metadata...');
         this.facsTitle.innerHTML = this.currFacs.facsTitleMain;
@@ -431,7 +436,7 @@ class HcmcMonocle{
         for (let tr of rows){
             tb.appendChild(tr);
         }
-        this.facsMetadata.appendChild(t);
+        this.metadataFacsimile.appendChild(t);
     }
 
     /** 
